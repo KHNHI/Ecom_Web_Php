@@ -14,3 +14,271 @@
 --------------------------------------------------------------------------------
 [2025-11-05 12:41:17] Error: include(): Failed opening 'C:\xampp\htdocs\Ecom_website\app\views\customer\pages/../components/footer.html' for inclusion (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\Ecom_website\app\views\customer\pages\collection.php on line 600
 --------------------------------------------------------------------------------
+[2025-11-05 13:03:21] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:03:21] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:03:21] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:03:22] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:03:30] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:03:30] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:03:30] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:03:30] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:03:37] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:03:37] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:03:37] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/79?depth=2): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:03:38] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/79?depth=2): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:03:55] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:03:55] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:03:55] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:03:55] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:04:03] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:04:03] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:04:03] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:04:03] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:04:38] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:04:38] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:04:38] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/80?depth=2): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:04:39] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/80?depth=2): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:04:42] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:04:42] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:04:42] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/79?depth=2): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:04:42] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/79?depth=2): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:05:01] Error: Undefined array key "full_name" in C:\xampp\htdocs\Ecom_website\app\models\User.php on line 370
+--------------------------------------------------------------------------------
+[2025-11-05 13:05:01] Error: Undefined array key "phone" in C:\xampp\htdocs\Ecom_website\app\models\User.php on line 371
+--------------------------------------------------------------------------------
+[2025-11-05 13:05:06] Error: Undefined array key "full_name" in C:\xampp\htdocs\Ecom_website\app\models\User.php on line 370
+--------------------------------------------------------------------------------
+[2025-11-05 13:05:06] Error: Undefined array key "phone" in C:\xampp\htdocs\Ecom_website\app\models\User.php on line 371
+--------------------------------------------------------------------------------
+[2025-11-05 13:05:34] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:05:34] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:05:34] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:05:34] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:06:23] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:06:23] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:06:23] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:06:23] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:06:41] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:06:41] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:06:42] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:06:42] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:07:04] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:07:04] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:07:04] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:07:04] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:07:20] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:07:20] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:07:20] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:07:20] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:07:56] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:07:56] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:07:56] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/33?depth=2): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:07:57] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/33?depth=2): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:08:42] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:08:42] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:08:42] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:08:43] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:08:46] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:08:46] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:08:46] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/68?depth=2): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:08:46] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/68?depth=2): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:08:53] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:08:53] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:08:53] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/79?depth=2): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:08:53] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/79?depth=2): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:09:08] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:09:08] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:09:08] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:09:09] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:09:41] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:09:41] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:09:41] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:09:41] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:16:34] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:16:34] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:16:34] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:16:34] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:16:39] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:16:39] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:16:39] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/79?depth=2): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:16:39] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/79?depth=2): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:17:50] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:17:50] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:17:50] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:17:50] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:18:05] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:18:05] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:18:05] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:18:05] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:18:24] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:18:24] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:18:24] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:18:25] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:18:33] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:18:33] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:18:33] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/82?depth=2): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:18:33] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/82?depth=2): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:18:35] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:18:35] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:18:35] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/79?depth=2): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:18:35] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/79?depth=2): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:22:12] Error: file_get_contents(): SSL operation failed with code 1. OpenSSL Error messages:
+error:1416F086:SSL routines:tls_process_server_certificate:certificate verify failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:22:12] Error: file_get_contents(): Failed to enable crypto in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:22:12] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: operation failed in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-05 13:22:12] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------

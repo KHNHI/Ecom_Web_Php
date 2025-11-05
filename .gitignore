@@ -1,0 +1,34 @@
+# Environment files
+.env
+.env.local
+.env.production
+
+# Vendor directory
+vendor/
+
+# Log files
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Upload directories with sensitive content
+public/uploads/avatars/
+public/uploads/products/*/
+!public/uploads/products/.gitkeep
+
+# Config files with sensitive data
+configs/database.php.local
+configs/email.php.local
