@@ -39,15 +39,7 @@
             <main class="content">
 <!-- Recent Purchases -->
 <div class="table-card">
-    <div class="table-header">
-        
-        <div class="dropdown">
-            <button class="btn btn-link" type="button" data-bs-toggle="dropdown">
-                <img src="https://cdn-icons-png.flaticon.com/512/2311/2311524.png" alt="More" width="20" height="20">
-            </button>
-           
-        </div>
-    </div>
+   
     <div class="table-responsive">
         <table class="table">
             <thead>

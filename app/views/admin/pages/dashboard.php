@@ -36,16 +36,7 @@
 
             <!-- Content -->
             <main class="content">
-<!-- Date Range -->
-<div class="mb-4">
-    <div class="d-flex justify-content-between align-items-center">
-        <div></div>
-        <div class="d-flex align-items-center gap-2">
-            <img src="https://cdn-icons-png.flaticon.com/512/2693/2693507.png" alt="Calendar" width="20" height="20">
-            <span><?= date('M d Y') ?> - <?= date('M d Y', strtotime('+7 days')) ?></span>
-        </div>
-    </div>
-</div>
+
 
 <!-- Stats Cards -->
 <div class="row mb-4">
@@ -53,40 +44,28 @@
         <div class="stats-card">
             <div class="stats-value">$<?= number_format($stats['total_revenue'] ?? 0, 0, ',', '.') ?></div>
             <div class="stats-label">Tổng Doanh Thu</div>
-            <div class="stats-change positive">
-                <img src="https://cdn-icons-png.flaticon.com/512/5610/5610944.png" alt="Up" width="12" height="12">
-                36.7% <small class="text-muted d-none d-sm-inline">So với tháng trước</small>
-            </div>
+           
         </div>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
         <div class="stats-card">
             <div class="stats-value"><?= number_format($stats['total_orders'] ?? 0, 0, ',', '.') ?></div>
             <div class="stats-label">Tổng Đơn Hàng</div>
-            <div class="stats-change positive">
-                <img src="https://cdn-icons-png.flaticon.com/512/5610/5610944.png" alt="Up" width="12" height="12">
-                36.7% <small class="text-muted d-none d-sm-inline">So với tháng trước</small>
-            </div>
+           
         </div>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
         <div class="stats-card">
             <div class="stats-value"><?= number_format($stats['total_products'] ?? 0, 0, ',', '.') ?></div>
             <div class="stats-label">Tổng Sản Phẩm</div>
-            <div class="stats-change positive">
-                <img src="https://cdn-icons-png.flaticon.com/512/5610/5610944.png" alt="Up" width="12" height="12">
-                36.7% <small class="text-muted d-none d-sm-inline">So với tháng trước</small>
-            </div>
+            
         </div>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
         <div class="stats-card">
             <div class="stats-value"><?= number_format($stats['total_customers'] ?? 0, 0, ',', '.') ?></div>
             <div class="stats-label">Tổng Khách Hàng</div>
-            <div class="stats-change positive">
-                <img src="https://cdn-icons-png.flaticon.com/512/5610/5610944.png" alt="Up" width="12" height="12">
-                36.7% <small class="text-muted d-none d-sm-inline">So với tháng trước</small>
-            </div>
+            
         </div>
     </div>
 </div>
@@ -98,23 +77,12 @@
         <div class="table-card">
             <div class="table-header">
                 <h5 class="table-title">Đơn Hàng Gần Đây</h5>
-                <div class="dropdown">
-                    <button class="btn btn-link" type="button" data-bs-toggle="dropdown">
-                        <img src="https://cdn-icons-png.flaticon.com/512/2311/2311524.png" alt="More" width="20" height="20">
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="index.php?url=orders">Xem Tất Cả</a></li>
-                        <li><a class="dropdown-item" href="#">Xuất Excel</a></li>
-                    </ul>
-                </div>
+                
             </div>
             <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th class="d-none d-lg-table-cell">
-                                <input type="checkbox" class="form-check-input">
-                            </th>
                             <th>Mã Đơn Hàng</th>
                             <th>Khách Hàng</th>
                             <th>Sản Phẩm</th>
@@ -127,7 +95,6 @@
                         <?php if (!empty($recentOrders)): ?>
                             <?php foreach ($recentOrders as $order): ?>
                                 <tr>
-                                    <td class="d-none d-lg-table-cell"><input type="checkbox" class="form-check-input"></td>
                                     <td>
                                         <strong>#<?= $order->order_id ?></strong>
                                     </td>
@@ -182,7 +149,7 @@
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="7" class="text-center py-4">
+                                <td colspan="6" class="text-center py-4">
                                     <div class="text-muted">
                                         <img src="https://cdn-icons-png.flaticon.com/512/2920/2920277.png" alt="No Data" width="48" height="48" class="mb-3 opacity-50">
                                         <p>Chưa có đơn hàng nào</p>
@@ -201,7 +168,7 @@
         <div class="table-card h-100">
             <div class="table-header">
                 <h5 class="table-title">Sản Phẩm Bán Chạy</h5>
-                <button class="btn btn-link btn-sm">BÁO CÁO</button>
+                
             </div>
             <div class="p-2 p-sm-3">
                 <?php if (!empty($bestSellers)): ?>
