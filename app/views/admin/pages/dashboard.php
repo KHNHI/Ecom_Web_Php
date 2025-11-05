@@ -92,41 +92,7 @@
 </div>
 
 <div class="row">
-    <!-- Sales Graph -->
-    <div class="col-lg-8 col-md-12 mb-4 order-2 order-lg-1">
-        <div class="table-card">
-            <div class="table-header flex-column flex-sm-row align-items-start align-items-sm-center">
-                <h5 class="table-title mb-2 mb-sm-0">Biểu Đồ Doanh Thu</h5>
-                <div class="btn-group btn-group-sm" role="group">
-                    <input type="radio" class="btn-check" name="period" id="weekly">
-                    <label class="btn btn-outline-secondary btn-sm" for="weekly">
-                        <span class="d-none d-sm-inline">Theo tuần</span>
-                        <span class="d-sm-none">W</span>
-                    </label>
-                    
-                    <input type="radio" class="btn-check" name="period" id="monthly" checked>
-                    <label class="btn btn-outline-secondary btn-sm" for="monthly">
-                        <span class="d-none d-sm-inline">Theo tháng</span>
-                        <span class="d-sm-none">M</span>
-                    </label>
-                    
-                    <input type="radio" class="btn-check" name="period" id="yearly">
-                    <label class="btn btn-outline-secondary btn-sm" for="yearly">
-                        <span class="d-none d-sm-inline">Theo năm</span>
-                        <span class="d-sm-none">Y</span>
-                    </label>
-                </div>
-            </div>
-            <div class="p-2 p-sm-4">
-                <!-- Placeholder for chart -->
-                <div class="text-center py-3 py-sm-5" style="height: 250px; min-height: 200px; border: 2px dashed #e9ecef; border-radius: var(--border-radius);">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2920/2920277.png" alt="Chart" width="48" height="48" class="mb-3 opacity-50">
-                   
-                </div>
-            </div>
-        </div>
-    </div>
-
+  
     <!-- Best Sellers -->
     <div class="col-lg-4 col-md-12 mb-4 order-1 order-lg-2">
         <div class="table-card">

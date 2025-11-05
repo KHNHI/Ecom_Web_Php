@@ -66,10 +66,11 @@ if (!$order) {
                     </div>
                     <div class="w-100 w-md-auto">
                         <?php
+                        // Order status theo database: 'pending', 'paid', 'shipped', 'delivered', 'cancelled'
                         $statusConfig = [
-                            'pending' => ['class' => 'warning', 'text' => 'Chờ xác nhận'],
-                            'confirmed' => ['class' => 'info', 'text' => 'Đã xác nhận'],
-                            'shipping' => ['class' => 'primary', 'text' => 'Đang giao hàng'],
+                            'pending' => ['class' => 'warning', 'text' => 'Chờ xử lý'],
+                            'paid' => ['class' => 'info', 'text' => 'Đã thanh toán'],
+                            'shipped' => ['class' => 'primary', 'text' => 'Đang giao hàng'],
                             'delivered' => ['class' => 'success', 'text' => 'Đã giao hàng'],
                             'cancelled' => ['class' => 'danger', 'text' => 'Đã hủy']
                         ];
@@ -144,16 +145,35 @@ if (!$order) {
                                     <!-- Editable: Dropdown -->
                                     <div class="mb-3">
                                         <label class="small text-muted mb-1">Trạng Thái Thanh Toán:</label>
+                                        <?php
+                                        // Payment statuses: 'pending', 'completed', 'failed', 'refunded' (theo database)
+                                        $paymentStatus = $order->payment_status ?? 'pending';
+                                        $paymentStatusTexts = [
+                                            'pending' => 'Chờ thanh toán',
+                                            'completed' => 'Hoàn thành',
+                                            'failed' => 'Thất bại',
+                                            'refunded' => 'Hoàn tiền'
+                                        ];
+                                        ?>
                                         <select class="form-select form-select-sm" 
                                                 onchange="updatePaymentStatus(<?= $order->order_id ?>, this.value)"
-                                                data-original="<?= $order->payment_status ?? 'unpaid' ?>">
-                                            <option value="unpaid" <?= ($order->payment_status ?? 'unpaid') === 'unpaid' ? 'selected' : '' ?>>
-                                                 Chưa thanh toán
+                                                data-original="<?= $paymentStatus ?>">
+                                            <option value="pending" <?= $paymentStatus === 'pending' ? 'selected' : '' ?>>
+                                                Chờ thanh toán
                                             </option>
-                                            <option value="paid" <?= ($order->payment_status ?? 'unpaid') === 'paid' ? 'selected' : '' ?>>
-                                                 Đã thanh toán
+                                            <option value="completed" <?= $paymentStatus === 'completed' ? 'selected' : '' ?>>
+                                                Hoàn thành
+                                            </option>
+                                            <option value="failed" <?= $paymentStatus === 'failed' ? 'selected' : '' ?>>
+                                                Thất bại
+                                            </option>
+                                            <option value="refunded" <?= $paymentStatus === 'refunded' ? 'selected' : '' ?>>
+                                                Hoàn tiền
                                             </option>
                                         </select>
+                                        <small class="text-muted d-block mt-1">
+                                            Hiện tại: <strong><?= $paymentStatusTexts[$paymentStatus] ?? $paymentStatus ?></strong>
+                                        </small>
                                     </div>
                                     
                                     <div class="mb-3">
@@ -161,21 +181,52 @@ if (!$order) {
                                         <select class="form-select form-select-sm" 
                                                 onchange="updateOrderStatus(<?= $order->order_id ?>, this.value)"
                                                 data-original="<?= $order->order_status ?? 'pending' ?>">
-                                            <option value="pending" <?= ($order->order_status ?? 'pending') === 'pending' ? 'selected' : '' ?>>Chờ xác nhận</option>
-                                            <option value="confirmed" <?= ($order->order_status ?? '') === 'confirmed' ? 'selected' : '' ?>>Đã xác nhận</option>
-                                            <option value="shipping" <?= ($order->order_status ?? '') === 'shipping' ? 'selected' : '' ?>>Đang giao hàng</option>
+                                            <option value="pending" <?= ($order->order_status ?? 'pending') === 'pending' ? 'selected' : '' ?>>Chờ xử lý</option>
+                                            <option value="paid" <?= ($order->order_status ?? '') === 'paid' ? 'selected' : '' ?>>Đã thanh toán</option>
+                                            <option value="shipped" <?= ($order->order_status ?? '') === 'shipped' ? 'selected' : '' ?>>Đang giao hàng</option>
                                             <option value="delivered" <?= ($order->order_status ?? '') === 'delivered' ? 'selected' : '' ?>>Đã giao hàng</option>
                                             <option value="cancelled" <?= ($order->order_status ?? '') === 'cancelled' ? 'selected' : '' ?>>Đã hủy</option>
                                         </select>
+                                        <small class="text-muted d-block mt-1">
+                                            Hiện tại: <strong><?php 
+                                            $orderStatusTexts = [
+                                                'pending' => 'Chờ xử lý',
+                                                'paid' => 'Đã thanh toán',
+                                                'shipped' => 'Đang giao hàng',
+                                                'delivered' => 'Đã giao hàng',
+                                                'cancelled' => 'Đã hủy'
+                                            ];
+                                            echo $orderStatusTexts[$order->order_status ?? 'pending'] ?? $order->order_status;
+                                            ?></strong>
+                                        </small>
                                     </div>
                                 <?php else: ?>
                                     <!-- Read-only -->
                                     <div class="mb-2">
                                         <label class="small text-muted">Thanh toán:</label>
-                                        <div><?= ($order->payment_status ?? 'unpaid') === 'paid' ? '✓ Đã thanh toán' : '⚠️ Chưa thanh toán' ?></div>
+                                        <?php
+                                        $paymentStatus = $order->payment_status ?? 'pending';
+                                        $paymentBadgeClass = [
+                                            'pending' => 'warning',
+                                            'completed' => 'success',
+                                            'failed' => 'danger',
+                                            'refunded' => 'info'
+                                        ];
+                                        $paymentTexts = [
+                                            'pending' => 'Chờ thanh toán',
+                                            'completed' => 'Hoàn thành',
+                                            'failed' => 'Thất bại',
+                                            'refunded' => 'Hoàn tiền'
+                                        ];
+                                        ?>
+                                        <div>
+                                            <span class="badge bg-<?= $paymentBadgeClass[$paymentStatus] ?? 'secondary' ?>">
+                                                <?= $paymentTexts[$paymentStatus] ?? $paymentStatus ?>
+                                            </span>
+                                        </div>
                                     </div>
                                     <div class="mb-2">
-                                        <label class="small text-muted">Trạng thái:</label>
+                                        <label class="small text-muted">Trạng thái đơn:</label>
                                         <div><?= $currentStatus['text'] ?></div>
                                     </div>
                                 <?php endif; ?>
@@ -355,7 +406,20 @@ if (!$order) {
         function updatePaymentStatus(orderId, newStatus) {
             const selectElement = event.target;
             const originalValue = selectElement.getAttribute('data-original');
-            const statusText = newStatus === 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán';
+            
+            const statusTexts = {
+                'pending': 'Chờ thanh toán',
+                'completed': 'Hoàn thành',
+                'failed': 'Thất bại',
+                'refunded': 'Hoàn tiền'
+            };
+            
+            const statusText = statusTexts[newStatus] || newStatus;
+            
+            console.log('=== Update Payment Status (Order Details) ===');
+            console.log('Order ID:', orderId);
+            console.log('New Status:', newStatus);
+            console.log('Status Text:', statusText);
             
             if (confirm(`Bạn có chắc chắn muốn thay đổi trạng thái thanh toán thành "${statusText}"?`)) {
                 selectElement.disabled = true;
@@ -372,8 +436,13 @@ if (!$order) {
                 
                 form.appendChild(statusInput);
                 document.body.appendChild(form);
+                
+                console.log('Form action:', form.action);
+                console.log('Submitting form...');
+                
                 form.submit();
             } else {
+                console.log('User cancelled');
                 selectElement.value = originalValue;
             }
         }
@@ -382,15 +451,22 @@ if (!$order) {
         function updateOrderStatus(orderId, newStatus) {
             const selectElement = event.target;
             const originalValue = selectElement.getAttribute('data-original');
+            
+            // Order status theo database: 'pending', 'paid', 'shipped', 'delivered', 'cancelled'
             const statusTexts = {
-                'pending': 'Chờ xác nhận',
-                'confirmed': 'Đã xác nhận',
-                'shipping': 'Đang giao hàng',
+                'pending': 'Chờ xử lý',
+                'paid': 'Đã thanh toán',
+                'shipped': 'Đang giao hàng',
                 'delivered': 'Đã giao hàng',
                 'cancelled': 'Đã hủy'
             };
             
             const statusText = statusTexts[newStatus] || newStatus;
+            
+            console.log('=== Update Order Status (Order Details) ===');
+            console.log('Order ID:', orderId);
+            console.log('New Status:', newStatus);
+            console.log('Status Text:', statusText);
             
             if (confirm(`Bạn có chắc chắn muốn thay đổi trạng thái đơn hàng thành "${statusText}"?`)) {
                 selectElement.disabled = true;
@@ -407,8 +483,14 @@ if (!$order) {
                 
                 form.appendChild(statusInput);
                 document.body.appendChild(form);
+                
+                console.log('Form action:', form.action);
+                console.log('Submitting form...');
+                
                 form.submit();
             } else {
+                console.log('User cancelled');
+            
                 selectElement.value = originalValue;
             }
         }

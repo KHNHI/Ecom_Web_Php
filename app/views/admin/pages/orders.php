@@ -95,58 +95,52 @@
                             <!-- Trạng Thái Thanh Toán -->
                             <td class="d-none d-xl-table-cell">
                                 <?php
-                                $paymentStatus = $order->payment_status ?? 'unpaid';
-                                $paymentConfig = [
-                                    'paid' => ['class' => 'success', 'text' => 'Đã thanh toán'],
-                                    'unpaid' => ['class' => 'warning', 'text' => 'Chưa thanh toán']
-                                ];
-                                $currentPayment = $paymentConfig[$paymentStatus] ?? $paymentConfig['unpaid'];
+                                // Payment statuses: 'pending', 'completed', 'failed', 'refunded' (theo database)
+                                $paymentStatus = $order->payment_status ?? 'pending';
                                 ?>
                                 <select class="form-select form-select-sm badge-select" 
                                         onchange="updatePaymentStatus(<?= $order->order_id ?>, this.value)"
-                                        style="width: auto; min-width: 120px;">
-                                    <option value="unpaid" <?= $paymentStatus === 'unpaid' ? 'selected' : '' ?> 
-                                            class="text-warning"> Chưa TT</option>
-                                    <option value="paid" <?= $paymentStatus === 'paid' ? 'selected' : '' ?> 
-                                            class="text-success"> Đã TT</option>
+                                        data-original="<?= $paymentStatus ?>"
+                                        style="width: auto; min-width: 140px;">
+                                    <option value="pending" <?= $paymentStatus === 'pending' ? 'selected' : '' ?>>
+                                        Chờ thanh toán
+                                    </option>
+                                    <option value="completed" <?= $paymentStatus === 'completed' ? 'selected' : '' ?>>
+                                        Hoàn thành
+                                    </option>
+                                    <option value="failed" <?= $paymentStatus === 'failed' ? 'selected' : '' ?>>
+                                        Thất bại
+                                    </option>
+                                    <option value="refunded" <?= $paymentStatus === 'refunded' ? 'selected' : '' ?>>
+                                        Hoàn tiền
+                                    </option>
                                 </select>
                             </td>
 
                             <!-- Trạng Thái Đơn Hàng -->
                             <td>
                                 <?php
+                                // Order statuses theo database: 'pending', 'paid', 'shipped', 'delivered', 'cancelled'
                                 $orderStatus = $order->order_status ?? 'pending';
-                                $orderConfig = [
-                                    'pending' => ['class' => 'warning', 'text' => 'Chờ xác nhận'],
-                                    'confirmed' => ['class' => 'info', 'text' => 'Đã xác nhận'],
-                                    'shipping' => ['class' => 'primary', 'text' => 'Đang giao hàng'],
-                                    'delivered' => ['class' => 'success', 'text' => 'Đã giao hàng'],
-                                    'cancelled' => ['class' => 'danger', 'text' => 'Đã hủy']
-                                ];
-                                $currentOrder = $orderConfig[$orderStatus] ?? $orderConfig['pending'];
                                 ?>
                                 <select class="form-select form-select-sm badge-select" 
                                         onchange="updateOrderStatus(<?= $order->order_id ?>, this.value)"
-                                        style="width: auto; min-width: 120px;">
+                                        data-original="<?= $orderStatus ?>"
+                                        style="width: auto; min-width: 130px;">
                                     <option value="pending" <?= $orderStatus === 'pending' ? 'selected' : '' ?>>
-                                        <span class="d-none d-lg-inline">Chờ xác nhận</span>
-                                        
+                                        Chờ xử lý
                                     </option>
-                                    <option value="confirmed" <?= $orderStatus === 'confirmed' ? 'selected' : '' ?>>
-                                        <span class="d-none d-lg-inline">Đã xác nhận</span>
-                                       
+                                    <option value="paid" <?= $orderStatus === 'paid' ? 'selected' : '' ?>>
+                                        Đã thanh toán
                                     </option>
-                                    <option value="shipping" <?= $orderStatus === 'shipping' ? 'selected' : '' ?>>
-                                        <span class="d-none d-lg-inline">Đang giao</span>
-                                        
+                                    <option value="shipped" <?= $orderStatus === 'shipped' ? 'selected' : '' ?>>
+                                        Đang giao hàng
                                     </option>
                                     <option value="delivered" <?= $orderStatus === 'delivered' ? 'selected' : '' ?>>
-                                        <span class="d-none d-lg-inline">Đã giao</span>
-                                       
+                                        Đã giao hàng
                                     </option>
                                     <option value="cancelled" <?= $orderStatus === 'cancelled' ? 'selected' : '' ?>>
-                                        <span class="d-none d-lg-inline"> Đã hủy</span>
-                                        
+                                        Đã hủy
                                     </option>
                                 </select>
                             </td>
@@ -280,10 +274,21 @@
 
         // Cập nhật trạng thái thanh toán
         function updatePaymentStatus(orderId, status) {
-            if (confirm('Bạn có chắc muốn cập nhật trạng thái thanh toán?')) {
+            console.log('=== updatePaymentStatus ===');
+            console.log('Order ID:', orderId);
+            console.log('New Status:', status);
+            
+            const statusTexts = {
+                'pending': 'Chờ thanh toán',
+                'completed': 'Hoàn thành',
+                'failed': 'Thất bại',
+                'refunded': 'Hoàn tiền'
+            };
+            
+            if (confirm(`Bạn có chắc muốn đổi trạng thái thành "${statusTexts[status]}"?`)) {
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '<?= BASE_URL ?>/admin/index.php?url=orders&action=updatePayment&id=' + orderId;
+                form.action = 'index.php?url=orders&action=updatePayment&id=' + orderId;
                 
                 const input = document.createElement('input');
                 input.type = 'hidden';
@@ -291,14 +296,31 @@
                 input.value = status;
                 form.appendChild(input);
                 
+                console.log('Form action:', form.action);
+                console.log('Submitting form...');
+                
                 document.body.appendChild(form);
                 form.submit();
+            } else {
+                // User cancelled - reset dropdown
+                console.log('User cancelled');
+                event.target.value = event.target.getAttribute('data-original');
             }
         }
 
         // Cập nhật trạng thái đơn hàng
         function updateOrderStatus(orderId, status) {
-            if (confirm('Bạn có chắc muốn cập nhật trạng thái đơn hàng?')) {
+            console.log('updateOrderStatus called - Order ID:', orderId, 'New Status:', status);
+            
+            const statusTexts = {
+                'pending': 'Chờ xử lý',
+                'paid': 'Đã thanh toán',
+                'shipped': 'Đang giao hàng',
+                'delivered': 'Đã giao hàng',
+                'cancelled': 'Đã hủy'
+            };
+            
+            if (confirm(`Bạn có chắc muốn đổi trạng thái thành "${statusTexts[status]}"?`)) {
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = '<?= BASE_URL ?>/admin/index.php?url=orders&action=updateStatus&id=' + orderId;
@@ -309,8 +331,15 @@
                 input.value = status;
                 form.appendChild(input);
                 
+                console.log('Form action:', form.action);
+                console.log('Submitting order status update...');
+                
                 document.body.appendChild(form);
                 form.submit();
+            } else {
+                // User cancelled - reset dropdown
+                console.log('User cancelled');
+                event.target.value = event.target.getAttribute('data-original');
             }
         }
     </script>

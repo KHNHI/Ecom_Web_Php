@@ -38,9 +38,10 @@ class OrdersController extends BaseController {
     }
 
     /**
-     * Cập nhật trạng thái thanh toán
+     * Cập nhật trạng thái thanh toán trong bảng PAYMENTS
      * Method: POST
-     * Khi payment_status = 'paid' → GỬI EMAIL XÁC NHẬN
+     * Payment statuses: 'pending', 'completed', 'failed', 'refunded'
+     * Khi status = 'completed' + BANK_TRANSFER → GỬI EMAIL
      */
     public function updatePayment() {
         // Chỉ chấp nhận POST
@@ -54,48 +55,62 @@ class OrdersController extends BaseController {
             $orderId = $_GET['id'] ?? null;
             $paymentStatus = $_POST['payment_status'] ?? null;
 
+            error_log("========== UPDATE PAYMENT STATUS ==========");
+            error_log("Order ID: $orderId");
+            error_log("New Status: $paymentStatus");
+            error_log("POST data: " . print_r($_POST, true));
+
             // Validate input
             if (!$orderId || !$paymentStatus) {
-                throw new Exception('Thiếu thông tin cần thiết');
+                throw new Exception('Thiếu thông tin: Order ID hoặc Payment Status');
             }
 
-            // Cập nhật payment status trong database
+            // Validate status (theo enum trong database)
+            $validStatuses = ['pending', 'completed', 'failed', 'refunded'];
+            if (!in_array($paymentStatus, $validStatuses)) {
+                throw new Exception("Trạng thái không hợp lệ: $paymentStatus. Chỉ chấp nhận: " . implode(', ', $validStatuses));
+            }
+
+            // Cập nhật payment_status trong bảng PAYMENTS
             $updateResult = $this->orderModel->updatePaymentStatus($orderId, $paymentStatus);
 
             if (!$updateResult) {
-                throw new Exception('Không thể cập nhật trạng thái thanh toán');
+                throw new Exception('Không thể cập nhật trạng thái thanh toán - Vui lòng kiểm tra log');
             }
 
-            // NẾU payment_status = 'paid' → GỬI EMAIL chỉ khi phương thức là chuyển khoản ngân hàng
-            if ($paymentStatus === 'paid') {
-                // Lấy thông tin đơn hàng để kiểm tra phương thức thanh toán
+            // NẾU payment_status = 'completed' VÀ payment_method = 'BANK_TRANSFER_HOME' → GỬI EMAIL
+            if ($paymentStatus === 'completed') {
                 $order = $this->orderModel->getOrderWithCustomerEmail($orderId);
-                $paymentMethod = $order->payment_method ?? $order->paymentMethod ?? null;
-                if ($paymentMethod === 'bank_transfer') {
+                $paymentMethod = $order->payment_method ?? null;
+                
+                error_log("Payment method: $paymentMethod");
+                
+                if ($paymentMethod === 'BANK_TRANSFER_HOME') {
+                    error_log("Sending payment confirmation email...");
                     $this->sendPaymentConfirmationEmail($orderId);
                 } else {
-                    // Log that no email sent because payment method not bank transfer
-                    error_log("Order #$orderId paid but payment_method='{$paymentMethod}' — no bank transfer email sent.");
+                    error_log("No email sent - Payment method is not BANK_TRANSFER_HOME");
                 }
             }
 
             $_SESSION['success'] = 'Cập nhật trạng thái thanh toán thành công!';
-            
-            // Log success để debug
-            error_log("Order #$orderId payment status updated to: $paymentStatus");
+            error_log("✓ SUCCESS: Payment status updated to '$paymentStatus'");
+            error_log("==========================================");
             
         } catch (Exception $e) {
             $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
-            error_log('OrdersController::updatePayment Error: ' . $e->getMessage());
+            error_log("✗ ERROR: " . $e->getMessage());
+            error_log("==========================================");
         }
 
-        // Redirect với cache busting để tránh cache browser
+        // Redirect
         $this->redirect('index.php?url=orders&t=' . time());
     }
 
     /**
      * Cập nhật trạng thái đơn hàng
      * Method: POST
+     * Database enum: 'pending', 'paid', 'shipped', 'delivered', 'cancelled'
      */
     public function updateOrder() {
         // Chỉ chấp nhận POST
@@ -105,17 +120,37 @@ class OrdersController extends BaseController {
             return;
         }
 
+        error_log("=== OrdersController::updateOrder START ===");
+        error_log("Request Method: " . $_SERVER['REQUEST_METHOD']);
+        error_log("POST Data: " . json_encode($_POST));
+        error_log("GET Data: " . json_encode($_GET));
+
         try {
             $orderId = $_GET['id'] ?? null;
             $orderStatus = $_POST['order_status'] ?? null;
+
+            error_log("Order ID: $orderId");
+            error_log("Order Status (raw): $orderStatus");
 
             // Validate input
             if (!$orderId || !$orderStatus) {
                 throw new Exception('Thiếu thông tin cần thiết');
             }
 
+            // Validate order status theo database enum
+            $validStatuses = ['pending', 'paid', 'shipped', 'delivered', 'cancelled'];
+            if (!in_array($orderStatus, $validStatuses)) {
+                error_log("Invalid order status attempted: $orderStatus");
+                error_log("Valid statuses: " . implode(', ', $validStatuses));
+                throw new Exception('Trạng thái đơn hàng không hợp lệ: ' . $orderStatus);
+            }
+
+            error_log("Order status validated successfully");
+
             // Cập nhật order status trong database
+            error_log("Calling orderModel->updateStatus($orderId, $orderStatus)");
             $updateResult = $this->orderModel->updateStatus($orderId, $orderStatus);
+            error_log("Update result: " . ($updateResult ? 'SUCCESS' : 'FAILED'));
 
             if (!$updateResult) {
                 throw new Exception('Không thể cập nhật trạng thái đơn hàng');
@@ -124,11 +159,13 @@ class OrdersController extends BaseController {
             $_SESSION['success'] = 'Cập nhật trạng thái đơn hàng thành công!';
             
             // Log success
-            error_log("Order #$orderId order status updated to: $orderStatus");
+            error_log("✓ Order #$orderId order status updated to: $orderStatus");
+            error_log("=== OrdersController::updateOrder END (SUCCESS) ===");
             
         } catch (Exception $e) {
             $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
-            error_log('OrdersController::updateOrder Error: ' . $e->getMessage());
+            error_log('✗ OrdersController::updateOrder Error: ' . $e->getMessage());
+            error_log("=== OrdersController::updateOrder END (ERROR) ===");
         }
 
         // Redirect với cache busting
