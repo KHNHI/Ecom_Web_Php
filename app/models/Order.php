@@ -115,11 +115,42 @@ class Order extends BaseModel {
         return $this->db->resultSet();
     }
 
+    /**
+     * Hard delete - Xóa vĩnh viễn đơn hàng khỏi database
+     * Xóa cả order_items và payments liên quan
+     */
     public function deleteById($id) {
-        // Soft delete by setting status to cancelled
-        $this->db->query("UPDATE " . $this->table . " SET order_status = 'cancelled', updated_at = NOW() WHERE order_id = :id");
-        $this->db->bind(':id', $id);
-        return $this->db->execute();
+        try {
+            // Bắt đầu transaction
+            $this->db->beginTransaction();
+            
+            // 1. Xóa order_items
+            $this->db->query("DELETE FROM order_items WHERE order_id = :order_id");
+            $this->db->bind(':order_id', $id);
+            $this->db->execute();
+            
+            // 2. Xóa payments
+            $this->db->query("DELETE FROM payments WHERE order_id = :order_id");
+            $this->db->bind(':order_id', $id);
+            $this->db->execute();
+            
+            // 3. Xóa order
+            $this->db->query("DELETE FROM " . $this->table . " WHERE order_id = :id");
+            $this->db->bind(':id', $id);
+            $result = $this->db->execute();
+            
+            // Commit transaction
+            $this->db->commit();
+            
+            error_log("✓ Order #$id deleted successfully (hard delete)");
+            return $result;
+            
+        } catch (Exception $e) {
+            // Rollback nếu có lỗi
+            $this->db->rollback();
+            error_log("✗ Error deleting order #$id: " . $e->getMessage());
+            return false;
+        }
     }
 
     /**

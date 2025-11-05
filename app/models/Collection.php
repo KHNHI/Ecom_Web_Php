@@ -259,6 +259,47 @@ class Collection extends BaseModel {
     }
 
     /**
+     * Kiểm tra tên bộ sưu tập đã tồn tại chưa
+     */
+    public function findByName($name, $excludeId = null) {
+        $sql = "SELECT * FROM {$this->table} WHERE collection_name = :name";
+        
+        if ($excludeId) {
+            $sql .= " AND collection_id != :exclude_id";
+        }
+        
+        $this->db->query($sql);
+        $this->db->bind(':name', $name);
+        
+        if ($excludeId) {
+            $this->db->bind(':exclude_id', $excludeId);
+        }
+        
+        return $this->db->single();
+    }
+
+    /**
+     * Tìm kiếm bộ sưu tập theo tên (partial match)
+     */
+    public function searchByName($searchTerm) {
+        $sql = "SELECT c.*, 
+                       COALESCE(pc.product_count, 0) as product_count
+                FROM {$this->table} c
+                LEFT JOIN (
+                    SELECT collection_id, COUNT(*) as product_count
+                    FROM products
+                    WHERE is_active = 1
+                    GROUP BY collection_id
+                ) pc ON c.collection_id = pc.collection_id
+                WHERE c.collection_name LIKE :search_term
+                ORDER BY c.collection_name ASC";
+        
+        $this->db->query($sql);
+        $this->db->bind(':search_term', '%' . $searchTerm . '%');
+        return $this->db->resultSet();
+    }
+
+    /**
      * Tạo bộ sưu tập mới
      */
     public function create($data) {

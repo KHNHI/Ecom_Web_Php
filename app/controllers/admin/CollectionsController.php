@@ -114,10 +114,23 @@ class CollectionsController extends BaseController {
                 return;
             }
 
+            $collectionName = trim($_POST['name']);
+
+            // KIỂM TRA TÊN ĐÃ TỒN TẠI CHƯA
+            $existing = $this->collectionModel->findByName($collectionName);
+            
+            if ($existing) {
+                $_SESSION['error'] = "Bộ sưu tập '<strong>" . htmlspecialchars($collectionName) . "</strong>' đã tồn tại! Vui lòng sử dụng tên khác.";
+                $_SESSION['old_input'] = $_POST;
+                error_log("Collection creation failed: Name already exists - $collectionName");
+                $this->redirect('index.php?url=add-collection');
+                return;
+            }
+
             // Prepare data cho Model
             $data = [
-                'collection_name' => trim($_POST['name']),
-                'slug' => $this->generateSlug($_POST['name']),
+                'collection_name' => $collectionName,
+                'slug' => $this->generateSlug($collectionName),
                 'description' => trim($_POST['description'] ?? ''),
                 'is_active' => isset($_POST['is_active']) ? 1 : 0
             ];
@@ -216,9 +229,21 @@ class CollectionsController extends BaseController {
                 return;
             }
 
+            $collectionName = trim($_POST['name']);
+
+            // KIỂM TRA TÊN TRÙNG (ngoại trừ collection hiện tại)
+            $existing = $this->collectionModel->findByName($collectionName, $collectionId);
+            
+            if ($existing) {
+                $_SESSION['error'] = "Tên bộ sưu tập '<strong>" . htmlspecialchars($collectionName) . "</strong>' đã được sử dụng! Vui lòng chọn tên khác.";
+                error_log("Collection update failed: Name already exists - $collectionName (excluding ID: $collectionId)");
+                $this->redirect('index.php?url=edit-collection&id=' . $collectionId);
+                return;
+            }
+
             $data = [
-                'collection_name' => trim($_POST['name']),
-                'slug' => $this->generateSlug($_POST['name']),
+                'collection_name' => $collectionName,
+                'slug' => $this->generateSlug($collectionName),
                 'description' => trim($_POST['description'] ?? ''),
                 'is_active' => isset($_POST['is_active']) ? 1 : 0
             ];
@@ -339,6 +364,72 @@ class CollectionsController extends BaseController {
 
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'message' => 'Lỗi: ' . $e->getMessage()]);
+        }
+        exit;
+    }
+
+    /**
+     * Tìm kiếm bộ sưu tập theo tên (AJAX)
+     */
+    public function search() {
+        header('Content-Type: application/json');
+        
+        try {
+            $searchTerm = $_GET['q'] ?? '';
+            
+            if (strlen($searchTerm) < 2) {
+                echo json_encode(['success' => false, 'message' => 'Vui lòng nhập ít nhất 2 ký tự']);
+                exit;
+            }
+
+            $collections = $this->collectionModel->searchByName($searchTerm);
+            
+            // Thêm ảnh cover cho kết quả
+            foreach ($collections as $collection) {
+                $coverImage = $this->collectionModel->getCollectionCoverImage($collection->collection_id);
+                $collection->image_path = $coverImage ? $coverImage->file_path : null;
+            }
+
+            echo json_encode([
+                'success' => true, 
+                'count' => count($collections),
+                'collections' => $collections
+            ]);
+
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => 'Lỗi: ' . $e->getMessage()]);
+        }
+        exit;
+    }
+
+    /**
+     * Kiểm tra tên bộ sưu tập có tồn tại không (AJAX - cho form validation)
+     */
+    public function checkName() {
+        header('Content-Type: application/json');
+        
+        try {
+            $name = $_GET['name'] ?? '';
+            $excludeId = $_GET['exclude_id'] ?? null;
+            
+            if (empty($name)) {
+                echo json_encode(['exists' => false]);
+                exit;
+            }
+
+            $existing = $this->collectionModel->findByName($name, $excludeId);
+            
+            echo json_encode([
+                'exists' => $existing !== null && $existing !== false,
+                'collection' => $existing ? [
+                    'id' => $existing->collection_id,
+                    'name' => $existing->collection_name,
+                    'slug' => $existing->slug
+                ] : null
+            ]);
+
+        } catch (Exception $e) {
+            echo json_encode(['exists' => false, 'error' => $e->getMessage()]);
         }
         exit;
     }

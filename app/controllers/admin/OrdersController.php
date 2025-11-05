@@ -248,7 +248,8 @@ class OrdersController extends BaseController {
     }
     
     /**
-     * Xóa đơn hàng (soft delete)
+     * Xóa vĩnh viễn đơn hàng khỏi database
+     * Hard delete: xóa order, order_items và payments
      */
     public function delete() {
         try {
@@ -258,48 +259,19 @@ class OrdersController extends BaseController {
                 throw new Exception('Không tìm thấy ID đơn hàng');
             }
 
+            error_log("=== Deleting Order #$orderId ===");
+            
+            // Gọi model để xóa (sẽ xóa cả order_items và payments)
             if ($this->orderModel->deleteById($orderId)) {
-                $_SESSION['success'] = 'Xóa đơn hàng thành công!';
+                $_SESSION['success'] = 'Đã xóa đơn hàng thành công!';
+                error_log("✓ Order #$orderId deleted successfully");
             } else {
                 $_SESSION['error'] = 'Có lỗi xảy ra khi xóa đơn hàng!';
+                error_log("✗ Failed to delete order #$orderId");
             }
         } catch (Exception $e) {
             $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
-        }
-        
-        $this->redirect('index.php?url=orders');
-    }
-
-    /**
-     * Xóa vĩnh viễn đơn hàng (hard delete)
-     */
-    public function hardDelete() {
-        try {
-            $orderId = $_GET['id'] ?? null;
-            
-            if (!$orderId) {
-                throw new Exception('Không tìm thấy ID đơn hàng');
-            }
-
-            error_log("Hard deleting order ID: $orderId");
-            
-            // Xóa order items trước
-            $db = Database::getInstance();
-            $db->query("DELETE FROM order_items WHERE order_id = :order_id");
-            $db->bind(':order_id', $orderId);
-            $db->execute();
-            
-            // Xóa order
-            if ($this->orderModel->deleteById($orderId)) {
-                $_SESSION['success'] = 'Đã xóa vĩnh viễn đơn hàng thành công!';
-                error_log("Order $orderId hard deleted successfully");
-            } else {
-                $_SESSION['error'] = 'Có lỗi xảy ra khi xóa đơn hàng!';
-                error_log("Failed to hard delete order $orderId");
-            }
-        } catch (Exception $e) {
-            $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
-            error_log("Hard delete order error: " . $e->getMessage());
+            error_log("✗ Delete order error: " . $e->getMessage());
         }
         
         $this->redirect('index.php?url=orders');
