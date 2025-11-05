@@ -84,13 +84,10 @@
                         <div class="d-flex flex-wrap gap-2 w-100 w-md-auto">
                             <!-- Filters -->
                             <div class="dropdown">
-                                <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                    <img src="https://cdn-icons-png.flaticon.com/512/3031/3031293.png" alt="Filter" width="16" height="16" class="me-1 d-none d-sm-inline">
-                                    <span class="d-none d-sm-inline">Lọc</span>
                                     <span class="d-sm-none">
                                         <img src="https://cdn-icons-png.flaticon.com/512/3031/3031293.png" alt="Filter" width="16" height="16">
                                     </span>
-                                </button>
+                                
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="#" onclick="filterProducts('all')">Tất cả</a></li>
                                     <li><a class="dropdown-item" href="#" onclick="filterProducts('active')">Đang bán</a></li>
