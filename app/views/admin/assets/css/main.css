@@ -325,12 +325,19 @@ body.sidebar-open {
   color: white;
   padding: var(--spacing-md);
   border-bottom: 1px solid #e0e0e0;
+  text-align: center;
 }
 
 .table td {
   padding: var(--spacing-md);
   vertical-align: middle;
   border-color: #e0e0e0;
+}
+
+/* Specific styling for order ID column */
+.table td strong {
+  display: block;
+  text-align: center;
 }
 
 /* Table content styling */

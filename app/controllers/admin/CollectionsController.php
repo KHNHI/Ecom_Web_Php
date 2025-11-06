@@ -453,12 +453,19 @@ class CollectionsController extends BaseController {
 
     /**
      * Xử lý upload cover image cho collection
+     * ⚠️ RÀNG BUỘC: CHỈ 1 ẢNH CHO MỖI COLLECTION
      * @return array ['success' => bool, 'errors' => array]
      */
     private function handleCoverImageUpload($collectionId, $file) {
         $result = ['success' => true, 'errors' => []];
         
         try {
+            // KIỂM TRA: Collection này đã có ảnh chưa
+            $existingImage = $this->collectionModel->getCollectionCoverImage($collectionId);
+            if ($existingImage) {
+                error_log("Collection $collectionId already has a cover image. It will be replaced.");
+            }
+            
             // Tạo thư mục upload nếu chưa tồn tại
             $collectionUploadPath = $this->uploadPath . $collectionId . '/';
             if (!is_dir($collectionUploadPath)) {
@@ -490,8 +497,15 @@ class CollectionsController extends BaseController {
 
             // Move uploaded file
             if (move_uploaded_file($fileTmpName, $destination)) {
-                // Add to images table via Collection Model
-                $this->collectionModel->addCollectionCover($collectionId, $destination);
+                // ⚠️ addCollectionCover sẽ TỰ ĐỘNG XÓA ảnh cũ trước khi thêm mới
+                $addResult = $this->collectionModel->addCollectionCover($collectionId, $destination);
+                
+                if (!$addResult) {
+                    $result['errors'][] = "Không thể lưu thông tin ảnh vào database";
+                    $result['success'] = false;
+                    // Xóa file vừa upload nếu không lưu được vào DB
+                    @unlink($destination);
+                }
             } else {
                 $result['errors'][] = "Không thể upload file {$fileName}";
                 $result['success'] = false;

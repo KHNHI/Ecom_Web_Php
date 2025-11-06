@@ -83,19 +83,19 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Mã Đơn Hàng</th>
-                            <th>Khách Hàng</th>
-                            <th>Sản Phẩm</th>
-                            <th>Ngày Đặt</th>
-                            <th>Trạng Thái</th>
-                            <th>Tổng Tiền</th>
+                            <th style="background-color: white; color: #b8860b; font-weight: bold; text-align: center;">Mã Đơn Hàng</th>
+                            <th style="background-color: white; color: #b8860b; font-weight: bold; text-align: center;">Khách Hàng</th>
+                            <th style="background-color: white; color: #b8860b; font-weight: bold; text-align: center;">Sản Phẩm</th>
+                            <th style="background-color: white; color: #b8860b; font-weight: bold; text-align: center;">Ngày Đặt</th>
+                            <th style="background-color: white; color: #b8860b; font-weight: bold; text-align: center;">Trạng Thái</th>
+                            <th style="background-color: white; color: #b8860b; font-weight: bold; text-align: center;">Tổng Tiền</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (!empty($recentOrders)): ?>
                             <?php foreach ($recentOrders as $order): ?>
                                 <tr>
-                                    <td>
+                                    <td class="text-center">
                                         <strong>#<?= $order->order_id ?></strong>
                                     </td>
                                     <td>
