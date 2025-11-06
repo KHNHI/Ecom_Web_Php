@@ -4,11 +4,22 @@ $cartItems = $data['cartItems'] ?? [];
 $cartSummary = $data['cartSummary'] ?? [];
 $userInfo = $data['userInfo'] ?? null;
 ?>
-    </div>
-    </div>
-    </div>
-    </div>
-    
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= $title ?> - Jewelry Store</title>
+   
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="<?= asset('css/css.css?v=' . time()) ?>" rel="stylesheet">
+</head>
+<body>
+   
     <!-- Loading Modal -->
     <div class="modal fade" id="loadingModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -23,35 +34,46 @@ $userInfo = $data['userInfo'] ?? null;
         </div>
     </div>
     <style>
+        :root {
+            --gold: #d4af37;
+            --dark-gold: #b8941f;
+            --light-gold: #f0e68c;
+            --cream: #f8f6f0;
+            --dark-brown: #3a2f28;
+            --light-gray: #f5f5f5;
+        }
+       
         body {
             background-color: var(--cream);
             background-image: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.755)),
                 url("https://images.unsplash.com/photo-1608042314453-ae338d80c427?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fGpld2Vscnl8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=600");
             background-size: cover;
             background-attachment: fixed;
+            font-family: "Inter", "Playfair Display", serif;
+            color: var(--dark-brown);
         }
-        
+       
         .checkout-header {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             padding: 1.5rem 0;
         }
-        
+       
         .step-indicator {
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 2rem 0;
         }
-        
+       
         .step {
             display: flex;
             align-items: center;
             margin: 0 1rem;
             position: relative;
         }
-        
+       
         .step:not(:last-child)::after {
             content: '';
             position: absolute;
@@ -62,7 +84,7 @@ $userInfo = $data['userInfo'] ?? null;
             height: 2px;
             background: var(--light-gold);
         }
-        
+       
         .step-number {
             width: 40px;
             height: 40px;
@@ -77,20 +99,20 @@ $userInfo = $data['userInfo'] ?? null;
             border: 2px solid var(--light-gold);
             transition: all 0.3s ease;
         }
-        
+       
         .step.active .step-number {
             background: var(--gold);
             color: white;
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
             transform: scale(1.1);
         }
-        
+       
         .step.completed .step-number {
             background: var(--dark-gold);
             color: white;
             border-color: var(--dark-gold);
         }
-        
+       
         .checkout-card {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
@@ -100,23 +122,23 @@ $userInfo = $data['userInfo'] ?? null;
             backdrop-filter: blur(8px);
             transition: all 0.3s ease;
         }
-        
+       
         .checkout-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 40px rgba(212, 175, 55, 0.15);
         }
-        
+       
         .checkout-card .card-header {
             background: linear-gradient(45deg, var(--cream), white);
             border-bottom: 2px solid var(--light-gold);
             border-radius: 15px 15px 0 0 !important;
             padding: 1.5rem;
         }
-        
+       
         .checkout-card .card-body {
             padding: 1.8rem;
         }
-        
+       
         .section-title {
             color: var(--dark-brown);
             font-weight: 600;
@@ -126,47 +148,47 @@ $userInfo = $data['userInfo'] ?? null;
             font-size: 16px;
             letter-spacing: 0.5px;
         }
-        
+       
         .section-title i {
             width: 24px;
             margin-right: 0.8rem;
             color: var(--gold);
         }
-        
+       
         .payment-option {
             transition: all 0.3s ease;
             cursor: pointer;
             background: white;
             border: 2px solid rgba(212, 175, 55, 0.2) !important;
         }
-        
+       
         .payment-option:hover {
             border-color: var(--gold) !important;
             box-shadow: 0 8px 24px rgba(212, 175, 55, 0.15);
             transform: translateY(-2px);
         }
-        
+       
         .form-check-input:checked + .form-check-label .payment-option {
             border-color: var(--gold) !important;
             background: linear-gradient(45deg, var(--cream), white);
         }
-        
+       
         .form-check-input:checked {
             background-color: var(--gold);
             border-color: var(--gold);
         }
-        
+       
         #bank_info, #store_info, #addressFields {
             transition: all 0.3s ease;
         }
-        
+       
         .summary-card {
             position: sticky;
             top: 100px;
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.98));
             border: 1px solid var(--light-gold);
         }
-        
+       
         .summary-row {
             display: flex;
             justify-content: space-between;
@@ -175,11 +197,11 @@ $userInfo = $data['userInfo'] ?? null;
             color: var(--dark-brown);
             font-size: 0.95rem;
         }
-        
+       
         .summary-row:last-child {
             border-bottom: none;
         }
-        
+       
         .summary-row.total {
             font-weight: 700;
             font-size: 1.2rem;
@@ -188,11 +210,11 @@ $userInfo = $data['userInfo'] ?? null;
             padding-top: 1.2rem;
             color: var(--dark-brown);
         }
-        
+       
         .summary-row.total span:last-child {
             color: var(--gold);
         }
-        
+       
         .product-item {
             display: flex;
             align-items: center;
@@ -200,16 +222,16 @@ $userInfo = $data['userInfo'] ?? null;
             border-bottom: 1px solid rgba(212, 175, 55, 0.1);
             transition: all 0.3s ease;
         }
-        
+       
         .product-item:hover {
             transform: translateX(5px);
             background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.05));
         }
-        
+       
         .product-item:last-child {
             border-bottom: none;
         }
-        
+       
         .product-image {
             width: 70px;
             height: 70px;
@@ -219,12 +241,12 @@ $userInfo = $data['userInfo'] ?? null;
             border: 2px solid var(--light-gold);
             transition: all 0.3s ease;
         }
-        
+       
         .product-item:hover .product-image {
             transform: scale(1.05);
             box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
         }
-        
+       
         .btn-checkout {
             background: var(--gold);
             border: none;
@@ -240,7 +262,7 @@ $userInfo = $data['userInfo'] ?? null;
             position: relative;
             overflow: hidden;
         }
-        
+       
         .btn-checkout::before {
             content: '';
             position: absolute;
@@ -251,17 +273,17 @@ $userInfo = $data['userInfo'] ?? null;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
             transition: 0.5s;
         }
-        
+       
         .btn-checkout:hover {
             background: var(--dark-gold);
             transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
         }
-        
+       
         .btn-checkout:hover::before {
             left: 100%;
         }
-        
+       
         .form-control, .form-select {
             border: 2px solid rgba(212, 175, 55, 0.2);
             border-radius: 8px;
@@ -271,32 +293,32 @@ $userInfo = $data['userInfo'] ?? null;
             color: var(--dark-brown);
             font-size: 0.95rem;
         }
-        
+       
         .form-control:focus, .form-select:focus {
             border-color: var(--gold);
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
             background: white;
         }
-        
+       
         .form-control::placeholder {
             color: #999;
             font-style: italic;
         }
-        
+       
         .form-label {
             color: var(--dark-brown);
             font-weight: 500;
             margin-bottom: 0.5rem;
             font-size: 0.95rem;
         }
-        
+       
         .invalid-feedback {
             display: none;
             color: #dc3545;
             font-size: 0.85rem;
             margin-top: 0.4rem;
         }
-        
+       
         .valid-feedback {
             display: none;
             color: #198754;
@@ -304,38 +326,38 @@ $userInfo = $data['userInfo'] ?? null;
             margin-top: 0.4rem;
             font-weight: 500;
         }
-        
+       
         /* Show appropriate feedback based on validation state */
         .form-control.is-invalid + .invalid-feedback,
         .form-select.is-invalid + .invalid-feedback {
             display: block;
         }
-        
+       
         .form-control.is-valid ~ .valid-feedback,
         .form-select.is-valid ~ .valid-feedback {
             display: block;
         }
-        
+       
         .form-control.is-valid, .form-select.is-valid {
             border-color: #198754;
             box-shadow: 0 0 15px rgba(25, 135, 84, 0.15);
         }
-        
+       
         .form-control.is-invalid, .form-select.is-invalid {
             border-color: #dc3545;
             box-shadow: 0 0 15px rgba(220, 53, 69, 0.15);
         }
-        
+       
         @media (max-width: 768px) {
             .step-indicator {
                 flex-direction: column;
                 gap: 1rem;
             }
-            
+           
             .step {
                 margin: 0;
             }
-            
+           
             .summary-card {
                 position: static;
             }
@@ -345,7 +367,7 @@ $userInfo = $data['userInfo'] ?? null;
 <body>
     <!-- Include Header -->
     <?php include __DIR__ . '/../components/header.php'; ?>
-    
+   
     <div class="checkout-header">
         <div class="container">
             <!-- Breadcrumb -->
@@ -356,12 +378,12 @@ $userInfo = $data['userInfo'] ?? null;
                     <li class="breadcrumb-item active">Thanh toán</li>
                 </ol>
             </nav>
-            
+           
             <h2 class="mb-0">
                 <i class="fas fa-credit-card me-2 text-primary"></i>
                 Thanh toán đơn hàng
             </h2>
-            
+           
             <!-- Step Indicator -->
             <div class="step-indicator">
                 <div class="step completed">
@@ -380,6 +402,7 @@ $userInfo = $data['userInfo'] ?? null;
         </div>
     </div>
 
+
     <div class="container py-4">
         <div class="row">
             <!-- Checkout Form -->
@@ -397,7 +420,7 @@ $userInfo = $data['userInfo'] ?? null;
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="payment-option p-3 rounded border mb-3">
-                                        <input class="form-check-input" type="radio" name="payment_delivery_method" 
+                                        <input class="form-check-input" type="radio" name="payment_delivery_method"
                                                id="bank_transfer_home" value="bank_transfer_home" checked>
                                         <label class="form-check-label w-100" for="bank_transfer_home">
                                             <div class="d-flex align-items-center">
@@ -412,7 +435,7 @@ $userInfo = $data['userInfo'] ?? null;
                                 </div>
                                 <div class="col-md-6">
                                     <div class="payment-option p-3 rounded border mb-3">
-                                        <input class="form-check-input" type="radio" name="payment_delivery_method" 
+                                        <input class="form-check-input" type="radio" name="payment_delivery_method"
                                                id="cash_store" value="cash_store">
                                         <label class="form-check-label w-100" for="cash_store">
                                             <div class="d-flex align-items-center">
@@ -426,6 +449,7 @@ $userInfo = $data['userInfo'] ?? null;
                                     </div>
                                 </div>
                             </div>
+
 
                             <!-- Bank Information -->
                             <div id="bank_info" class="mt-4">
@@ -445,6 +469,7 @@ $userInfo = $data['userInfo'] ?? null;
                                     </div>
                                 </div>
                             </div>
+
 
                             <!-- Store Information -->
                             <div id="store_info" class="mt-4" style="display: none;">
@@ -483,6 +508,7 @@ $userInfo = $data['userInfo'] ?? null;
                         </div>
                     </div>
 
+
                     <!-- Customer Information -->
                     <div class="checkout-card">
                         <div class="card-header">
@@ -495,24 +521,24 @@ $userInfo = $data['userInfo'] ?? null;
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-semibold">Họ và tên <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="name" 
-                                           value="<?= $userInfo ? htmlspecialchars($userInfo->name) : '' ?>" 
+                                    <input type="text" class="form-control" name="name"
+                                           value="<?= $userInfo ? htmlspecialchars($userInfo->name) : '' ?>"
                                            placeholder="Nhập họ và tên đầy đủ" required>
                                     <div class="invalid-feedback">Vui lòng nhập họ và tên</div>
                                     <div class="valid-feedback">Tên hợp lệ ✓</div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" name="email" 
-                                           value="<?= $userInfo ? htmlspecialchars($userInfo->email) : '' ?>" 
+                                    <input type="email" class="form-control" name="email"
+                                           value="<?= $userInfo ? htmlspecialchars($userInfo->email) : '' ?>"
                                            placeholder="example@email.com" required>
                                     <div class="invalid-feedback">Vui lòng nhập email hợp lệ</div>
                                     <div class="valid-feedback">Email hợp lệ ✓</div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-semibold">Số điện thoại <span class="text-danger">*</span></label>
-                                    <input type="tel" class="form-control" name="phone" 
-                                           value="<?= $userInfo ? htmlspecialchars($userInfo->phone ?? '') : '' ?>" 
+                                    <input type="tel" class="form-control" name="phone"
+                                           value="<?= $userInfo ? htmlspecialchars($userInfo->phone ?? '') : '' ?>"
                                            placeholder="0123456789" required>
                                     <div class="invalid-feedback">Vui lòng nhập số điện thoại</div>
                                     <div class="valid-feedback">Số điện thoại hợp lệ ✓</div>
@@ -537,7 +563,7 @@ $userInfo = $data['userInfo'] ?? null;
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label class="form-label fw-semibold">Địa chỉ chi tiết <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="address" 
+                                        <input type="text" class="form-control" name="address"
                                                placeholder="Ví dụ: 123 Nguyễn Du" required>
                                         <div class="invalid-feedback">Vui lòng nhập địa chỉ chi tiết</div>
                                         <div class="valid-feedback">Địa chỉ hợp lệ ✓</div>
@@ -545,12 +571,15 @@ $userInfo = $data['userInfo'] ?? null;
                                 </div>
                                 <div class="col-12 mb-3">
                                     <label class="form-label fw-semibold">Ghi chú đơn hàng</label>
-                                    <textarea class="form-control" name="notes" rows="2" 
+                                    <textarea class="form-control" name="notes" rows="2"
                                               placeholder="Ghi chú về đơn hàng, thời gian giao hàng mong muốn..."></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+
+
 
 
 
@@ -585,6 +614,7 @@ $userInfo = $data['userInfo'] ?? null;
            
             </div>
 
+
             <!-- Order Summary -->
             <div class="col-lg-4">
                 <div class="checkout-card summary-card">
@@ -600,13 +630,13 @@ $userInfo = $data['userInfo'] ?? null;
                             <?php if (!empty($cartItems)): ?>
                                 <?php foreach ($cartItems as $item): ?>
                                     <div class="product-item">
-                                          <?php 
+                                          <?php
                                 // Get primary image URL using the Product model method
                                            $productModel = new Product();
                                             $imageUrl = $productModel->getPrimaryImageUrl($item['product']->product_id);
                                         ?>
-                                             <img src="<?php echo $imageUrl; ?>" 
-                                              alt="<?php echo htmlspecialchars($item['product']->name); ?>" 
+                                             <img src="<?php echo $imageUrl; ?>"
+                                              alt="<?php echo htmlspecialchars($item['product']->name); ?>"
                                              class="product-image">
                                         <div class="flex-grow-1">
                                             <div class="fw-semibold mb-1"><?= htmlspecialchars($item['product']->name) ?></div>
@@ -630,6 +660,7 @@ $userInfo = $data['userInfo'] ?? null;
                                 </div>
                             <?php endif; ?>
                         </div>
+
 
                         <!-- Order Summary -->
                         <div class="order-summary">
@@ -657,6 +688,7 @@ $userInfo = $data['userInfo'] ?? null;
                             </div>
                         </div>
 
+
                         <!-- Free Shipping Notice -->
                         <?php if (($cartSummary['subtotal'] ?? 0) < 500000): ?>
                             <div class="alert alert-info mt-3">
@@ -665,12 +697,13 @@ $userInfo = $data['userInfo'] ?? null;
                             </div>
                         <?php endif; ?>
 
+
                         <!-- Place Order Button -->
                         <button type="submit" form="checkoutForm" class="btn btn-primary btn-checkout mt-3">
                             <i class="fas fa-lock me-2"></i>
                             Đặt hàng ngay
                         </button>
-                        
+                       
                         <div class="text-center mt-3">
                             <small class="text-muted">
                                 <i class="fas fa-shield-alt me-1"></i>
@@ -681,7 +714,7 @@ $userInfo = $data['userInfo'] ?? null;
                 </div>
             </div>
         </div>
-        
+       
         <?php if (($cartSummary['subtotal'] ?? 0) < 500000): ?>
             <div class="alert alert-info mt-3 mb-0">
                 <small>
@@ -692,6 +725,7 @@ $userInfo = $data['userInfo'] ?? null;
         <?php endif; ?>
     </div>
 </div>
+
 
 <!-- Loading Modal -->
 <div class="modal fade" id="loadingModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -712,34 +746,41 @@ $userInfo = $data['userInfo'] ?? null;
     background-color: rgba(13, 110, 253, 0.1);
 }
 
+
 .payment-option {
     transition: all 0.3s ease;
     cursor: pointer;
 }
+
 
 .payment-option:hover {
     border-color: #0d6efd !important;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+
 .order-items::-webkit-scrollbar {
     width: 4px;
 }
+
 
 .order-items::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 4px;
 }
 
+
 .order-items::-webkit-scrollbar-thumb {
     background: #c1c1c1;
     border-radius: 4px;
 }
 
+
 .order-items::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
 }
 </style>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -751,30 +792,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingModalEl = document.getElementById('loadingModal');
     const loadingModal = loadingModalEl ? new bootstrap.Modal(loadingModalEl) : null;
 
+
     // Province and Ward selects
     const provinceSelect = document.getElementById('province');
     const wardSelect = document.getElementById('ward');
     const phoneInput = document.querySelector('input[name="phone"]');
     const transferContent = document.getElementById('transfer_content');
 
+
     // Load provinces on page load
     loadProvinces();
+
 
     // Province change handler
     if (provinceSelect && wardSelect) {
         provinceSelect.addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
             const provinceCode = selectedOption ? selectedOption.dataset.code : null; // Lấy code từ dataset
-            
+           
             // Reset ward selection
             wardSelect.innerHTML = '<option value="">Chọn phường/xã...</option>';
             wardSelect.disabled = !provinceCode;
-            
+           
             if (provinceCode) {
                 loadWards(provinceCode);
             }
         });
     }
+
 
     // Phone input change handler - update transfer content
     if (phoneInput && transferContent) {
@@ -788,6 +833,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+
     // Delivery method change handler
     deliveryMethods.forEach(method => {
         method.addEventListener('change', function() {
@@ -796,18 +842,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+
     // Initialize with default selection
     const checkedMethod = document.querySelector('input[name="payment_delivery_method"]:checked');
     if (checkedMethod) {
         toggleDeliveryMethod(checkedMethod.value);
     }
 
+
     function toggleDeliveryMethod(method) {
         console.log('Toggling delivery method:', method);
         console.log('Bank info element:', bankInfo);
         console.log('Store info element:', storeInfo);
         console.log('Address fields element:', addressFields);
-        
+       
         if (method === 'bank_transfer_home') {
             // Show bank info and address fields, hide store info
             if (bankInfo) {
@@ -847,11 +895,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+
     async function loadProvinces() {
         try {
             const response = await fetch('<?= url('api/locations/provinces') ?>');
             const data = await response.json();
-            
+           
             if (data.success && data.data) {
                 provinceSelect.innerHTML = '<option value="">Chọn tỉnh/thành phố...</option>';
                 data.data.forEach(province => {
@@ -868,17 +917,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+
     async function loadWards(provinceCode) {
         if (!provinceCode) return;
-        
+       
         try {
             wardSelect.innerHTML = '<option value="">Đang tải...</option>';
             wardSelect.disabled = true;
-            
+           
             const wardUrl = `<?= url('api/locations/wards') ?>?province=${provinceCode}`;
             const response = await fetch(wardUrl);
             const data = await response.json();
-            
+           
             if (data.success && data.data && data.data.length > 0) {
                 wardSelect.innerHTML = '<option value="">Chọn phường/xã...</option>';
                 data.data.forEach(ward => {
@@ -902,6 +952,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+
     // Real-time validation
     if (form) {
         // Add validation listeners to all form fields
@@ -910,12 +961,12 @@ document.addEventListener('DOMContentLoaded', function() {
             field.addEventListener('blur', function() {
                 validateField(this);
             });
-            
+           
             field.addEventListener('input', function() {
                 // Clear validation state on input
                 this.classList.remove('is-valid', 'is-invalid');
             });
-            
+           
             // For select fields, validate on change
             if (field.tagName === 'SELECT') {
                 field.addEventListener('change', function() {
@@ -923,23 +974,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         });
-        
+       
         // Validate individual field
         function validateField(field) {
             const value = field.value.trim();
-            
+           
             // Always clear previous validation classes first
             field.classList.remove('is-valid', 'is-invalid');
-            
+           
             // Don't validate if field is empty (let them type first)
             if (!value && field.hasAttribute('required')) {
                 return; // No validation display for empty required fields
             }
-            
+           
             // If field has content, validate it
             if (value) {
                 let isValid = true;
-                
+               
                 // Email validation
                 if (field.type === 'email') {
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -962,17 +1013,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 else if (field.tagName === 'SELECT') {
                     isValid = value !== '';
                 }
-                
+               
                 // Apply validation classes only if field has content
                 field.classList.add(isValid ? 'is-valid' : 'is-invalid');
             }
         }
     }
 
+
     // Form submission handler
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+
 
             // Custom validation for dynamic fields
             const paymentMethod = document.querySelector('input[name="payment_delivery_method"]:checked');
@@ -982,11 +1035,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
+
             // Validate address fields only for bank_transfer_home
             if (paymentMethod.value === 'bank_transfer_home') {
                 const province = document.getElementById('province')?.value;
                 const ward = document.getElementById('ward')?.value;
                 const address = document.querySelector('input[name="address"]')?.value;
+
 
                 if (!province || !ward || !address?.trim()) {
                     showNotification('Vui lòng điền đầy đủ thông tin địa chỉ giao hàng', 'error');
@@ -996,6 +1051,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
 
+
             // Validate form
             if (!form.checkValidity()) {
                 e.stopPropagation();
@@ -1003,11 +1059,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
+
             // Show loading modal if available
             if (loadingModal) loadingModal.show();
 
+
             // Prepare form data
             const formData = new FormData(form);
+
 
             // Submit checkout
             fetch('<?= url('/checkout/process') ?>', {
@@ -1020,6 +1079,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (loadingModal) loadingModal.hide();
+
 
                 if (data.success) {
                     Swal.fire({
@@ -1067,6 +1127,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+
     // Helper function for notifications
     function showNotification(message, type = 'info') {
         // Create notification element
@@ -1077,9 +1138,9 @@ document.addEventListener('DOMContentLoaded', function() {
             ${message}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         `;
-        
+       
         document.body.appendChild(notification);
-        
+       
         // Auto remove after 5 seconds
         setTimeout(() => {
             if (notification.parentNode) {
@@ -1091,10 +1152,15 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
     <?php include __DIR__ . '/../components/footer.php'; ?>
 
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
 </body>
 </html>
+
+
+
