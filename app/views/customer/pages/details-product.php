@@ -1,4 +1,4 @@
-<?php 
+s<?php 
 // Include URL helper if not already included
 if (!function_exists('url')) {
     require_once __DIR__ . '/../../../../helpers/url_helper.php';
@@ -441,7 +441,7 @@ if (!function_exists('url')) {
     <?php if (isset($relatedProducts) && !empty($relatedProducts)): ?>
     <div class="container">
         <div class="related-products">
-            <h3 class="mb-4">Sản phẩm liên quan</h3>
+            <h3 class="mb-4">Sản phẩm cùng Bộ sưu tập</h3>
             <div class="row">
                         <?php foreach ($relatedProducts as $relatedProduct): ?>
                             <div class="col-lg-3 col-md-6 mb-4">
@@ -450,9 +450,8 @@ if (!function_exists('url')) {
                                         <div class="product-image">
                                             <img src="<?= $relatedProduct->primary_image ? asset($relatedProduct->primary_image->file_path) : 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=300' ?>" 
                                                  alt="<?= htmlspecialchars($relatedProduct->name) ?>">
-                                            <button class="wishlist-btn" onclick="event.preventDefault(); event.stopPropagation();"><i class="far fa-heart"></i></button>
-                                            <button class="compare-btn" onclick="event.preventDefault(); event.stopPropagation();"><i class="fas fa-eye"></i></button>
-                                            <button class="add-to-cart-overlay" onclick="event.preventDefault(); event.stopPropagation();">Thêm vào giỏ</button>
+                                           
+                                            
                                         </div>
                                         <h6 class="mt-3"><?= htmlspecialchars($relatedProduct->name) ?></h6>
                                         <div class="rating mb-2">

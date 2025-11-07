@@ -191,6 +191,8 @@ $products = $data['products'] ?? [];
             overflow: visible;
             padding: 20px 10px;
             margin: -20px -10px;
+            justify-content: center;
+            align-items: center;
         }
 
         .product-card {
@@ -198,6 +200,7 @@ $products = $data['products'] ?? [];
             border-radius: 15px;
             box-shadow: 0 8px 24px rgba(212, 175, 55, 0.15);
             width: 320px;
+            height: 400px;
             flex-shrink: 0;
             transition: all 0.3s ease;
             border: 2px solid rgba(212, 175, 55, 0.1);
@@ -369,6 +372,65 @@ $products = $data['products'] ?? [];
                 padding: 0 0.5rem;
             }
         }
+
+        /* Mobile gallery styles */
+        .mobile-gallery-wrapper {
+            display: none;
+            max-width: 100%;
+            padding: 0 1rem;
+        }
+
+        .gallery-slider {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .gallery-slide {
+            display: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .gallery-slide.active {
+            display: block;
+        }
+
+        .mobile-slide-card {
+            width: 100%;
+            margin: 0 auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .gallery-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .gallery-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ddd;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .gallery-dot.active {
+            background: #d4af37;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .product-carousel { display: none !important; }
+            .mobile-gallery-wrapper { display: block !important; }
+            .product-card { width: 100% !important; }
+        }
     </style>
 </head>
 <body>
@@ -401,6 +463,15 @@ $products = $data['products'] ?? [];
                         <span>›</span>
                     </button>
                 </div>
+                <!-- Mobile gallery (hidden on desktop, shown on small screens) -->
+                <div class="mobile-gallery-wrapper d-none" id="mobileGalleryWrapper">
+                    <div class="gallery-slider" id="mobileGallery">
+                        <!-- mobile slides will be injected here -->
+                    </div>
+                    <div class="gallery-dots text-center mt-3" id="mobileDots" role="tablist" aria-label="Chỉ mục sản phẩm">
+                        <!-- dots injected here -->
+                    </div>
+                </div>
             </div>
         </section>
     </div>
@@ -417,12 +488,115 @@ $products = $data['products'] ?? [];
 
         function renderProducts() {
             const container = document.getElementById('cardsContainer');
+            const mobileWrapper = document.getElementById('mobileGalleryWrapper');
+            const mobileGallery = document.getElementById('mobileGallery');
+            const mobileDots = document.getElementById('mobileDots');
+
+            // Reset
             container.innerHTML = '';
+            if (mobileGallery) mobileGallery.innerHTML = '';
+            if (mobileDots) mobileDots.innerHTML = '';
 
             if (!productsData || productsData.length === 0) {
-                container.innerHTML = '<div class="text-center text-muted">Không có sản phẩm nào trong bộ sưu tập này.</div>';
+                const emptyHtml = '<div class="text-center text-muted">Không có sản phẩm nào trong bộ sưu tập này.</div>';
+                container.innerHTML = emptyHtml;
+                if (mobileGallery) mobileGallery.innerHTML = emptyHtml;
+                // Show appropriate UI
+                if (mobileWrapper) mobileWrapper.classList.add('d-none');
+                document.querySelector('.product-carousel').classList.remove('d-none');
                 return;
             }
+
+            const isMobile = window.innerWidth <= 768;
+
+            // Clamp currentIndex
+            if (currentIndex < 0) currentIndex = 0;
+            if (currentIndex >= productsData.length) currentIndex = Math.max(0, productsData.length - 1);
+            const baseUrl = '<?= BASE_URL ?>';
+
+            if (isMobile && mobileWrapper && mobileGallery && mobileDots) {
+                // Render mobile slides (one product per slide)
+                productsData.forEach((product, index) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'gallery-slide' + (index === currentIndex ? ' active' : '');
+                    slide.setAttribute('data-index', index);
+                    // Build image url
+                    let imageUrl = baseUrl + '/public/assets/images/placeholder.svg';
+                    if (product.main_image && product.main_image !== 'assets/images/placeholder.svg') {
+                        if (product.main_image.startsWith('http') || product.main_image.startsWith('/')) {
+                            imageUrl = product.main_image;
+                        } else {
+                            imageUrl = baseUrl + '/' + product.main_image;
+                        }
+                    } else if (product.images && product.images.trim() !== '') {
+                        const imageArray = product.images.split(',');
+                        const firstImage = imageArray[0].trim();
+                        if (firstImage) {
+                            if (firstImage.startsWith('http') || firstImage.startsWith('/')) {
+                                imageUrl = firstImage;
+                            } else {
+                                imageUrl = baseUrl + '/' + firstImage;
+                            }
+                        }
+                    }
+
+                    slide.innerHTML = `
+                        <div class="product-card mobile-slide-card" onclick="window.location.href='<?= BASE_URL ?>/product/${product.slug || product.product_id}'">
+                            <div class="product-image">
+                                <img src="${imageUrl}" alt="${product.name || 'Sản phẩm'}" onerror="this.src='${baseUrl}/public/assets/images/placeholder.svg'">
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">${product.name || 'Sản phẩm'}</h3>
+                                <p class="product-description">${product.description || ''}</p>
+                            </div>
+                        </div>
+                    `;
+
+                    mobileGallery.appendChild(slide);
+                });
+
+                // Create dots
+                productsData.forEach((p, i) => {
+                    const dot = document.createElement('button');
+                    dot.className = 'gallery-dot' + (i === currentIndex ? ' active' : '');
+                    dot.setAttribute('aria-label', `Chuyển đến sản phẩm ${i + 1}`);
+                    dot.addEventListener('click', () => goToMobileSlide(i));
+                    mobileDots.appendChild(dot);
+                });
+
+                // Show mobile wrapper, hide desktop carousel
+                mobileWrapper.classList.remove('d-none');
+                document.querySelector('.product-carousel').classList.add('d-none');
+
+                // Touch support (swipe)
+                let touchStartX = 0;
+                let touchEndX = 0;
+                mobileGallery.addEventListener('touchstart', e => {
+                    touchStartX = e.changedTouches[0].screenX;
+                }, {passive: true});
+                mobileGallery.addEventListener('touchend', e => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    const diff = touchStartX - touchEndX;
+                    const threshold = 40;
+                    if (Math.abs(diff) > threshold) {
+                        if (diff > 0) {
+                            // left swipe
+                            goToMobileSlide(Math.min(currentIndex + 1, productsData.length - 1));
+                        } else {
+                            // right swipe
+                            goToMobileSlide(Math.max(currentIndex - 1, 0));
+                        }
+                    }
+                }, {passive: true});
+
+                // Ensure active slide is visible
+                updateMobileActive();
+                return;
+            }
+
+            // Desktop / tablet behavior (grid-like carousel)
+            if (mobileWrapper) mobileWrapper.classList.add('d-none');
+            document.querySelector('.product-carousel').classList.remove('d-none');
 
             const visibleProducts = productsData.slice(currentIndex, currentIndex + productsPerPage);
 
@@ -435,26 +609,16 @@ $products = $data['products'] ?? [];
                 card.addEventListener('click', () => {
                     window.location.href = '<?= BASE_URL ?>/product/' + (product.slug || product.product_id);
                 });
-                
-                // Debug product data
-                console.log('Product data:', product);
-                console.log('Product main_image:', product.main_image);
-                console.log('Product images:', product.images);
-                
-                // Get main image with base URL
-                const baseUrl = '<?= BASE_URL ?>';
-                let imageUrl = baseUrl + '/public/assets/images/placeholder.svg'; // Default
-                
-                // Try different image sources
+
+                // Get image url
+                let imageUrl = baseUrl + '/public/assets/images/placeholder.svg';
                 if (product.main_image && product.main_image !== 'assets/images/placeholder.svg') {
-                    // If main_image is already set by controller
                     if (product.main_image.startsWith('http') || product.main_image.startsWith('/')) {
                         imageUrl = product.main_image;
                     } else {
                         imageUrl = baseUrl + '/' + product.main_image;
                     }
                 } else if (product.images && product.images.trim() !== '') {
-                    // If images string exists, use first image
                     const imageArray = product.images.split(',');
                     const firstImage = imageArray[0].trim();
                     if (firstImage) {
@@ -465,13 +629,10 @@ $products = $data['products'] ?? [];
                         }
                     }
                 }
-                
-                console.log('Final imageUrl:', imageUrl);
-                
+
                 card.innerHTML = `
                     <div class="product-image">
-                        <img src="${imageUrl}" alt="${product.name || 'Sản phẩm'}" 
-                             onerror="this.src='${baseUrl}/public/assets/images/placeholder.svg'">
+                        <img src="${imageUrl}" alt="${product.name || 'Sản phẩm'}" onerror="this.src='${baseUrl}/public/assets/images/placeholder.svg'">
                     </div>
                     <div class="product-info">
                         <h3 class="product-title">${product.name || 'Sản phẩm'}</h3>
@@ -510,6 +671,31 @@ $products = $data['products'] ?? [];
                 nextBtn.classList.add('disabled');
             }
         }
+
+        /* Mobile helper: update active slide/dot */
+        function updateMobileActive() {
+            const slides = document.querySelectorAll('#mobileGallery .gallery-slide');
+            const dots = document.querySelectorAll('#mobileDots .gallery-dot');
+            slides.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+            if (slides[currentIndex]) slides[currentIndex].classList.add('active');
+            if (dots[currentIndex]) dots[currentIndex].classList.add('active');
+        }
+
+        function goToMobileSlide(index) {
+            if (!productsData || productsData.length === 0) return;
+            currentIndex = index;
+            updateMobileActive();
+        }
+
+        // Re-render on resize to switch between grid and mobile slider
+        window.addEventListener('resize', function() {
+            // small debounce
+            clearTimeout(window.__collectionResizeTimer);
+            window.__collectionResizeTimer = setTimeout(() => {
+                renderProducts();
+            }, 150);
+        });
 
         function showProducts() {
             console.log('showProducts called');
@@ -597,6 +783,6 @@ $products = $data['products'] ?? [];
     </script>
 
     <!-- Include Footer -->
-    <?php include __DIR__ . '/../components/footer.php'; ?>
+    
 </body>
 </html>

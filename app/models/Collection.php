@@ -259,6 +259,47 @@ class Collection extends BaseModel {
     }
 
     /**
+     * Kiểm tra tên bộ sưu tập đã tồn tại chưa
+     */
+    public function findByName($name, $excludeId = null) {
+        $sql = "SELECT * FROM {$this->table} WHERE collection_name = :name";
+        
+        if ($excludeId) {
+            $sql .= " AND collection_id != :exclude_id";
+        }
+        
+        $this->db->query($sql);
+        $this->db->bind(':name', $name);
+        
+        if ($excludeId) {
+            $this->db->bind(':exclude_id', $excludeId);
+        }
+        
+        return $this->db->single();
+    }
+
+    /**
+     * Tìm kiếm bộ sưu tập theo tên (partial match)
+     */
+    public function searchByName($searchTerm) {
+        $sql = "SELECT c.*, 
+                       COALESCE(pc.product_count, 0) as product_count
+                FROM {$this->table} c
+                LEFT JOIN (
+                    SELECT collection_id, COUNT(*) as product_count
+                    FROM products
+                    WHERE is_active = 1
+                    GROUP BY collection_id
+                ) pc ON c.collection_id = pc.collection_id
+                WHERE c.collection_name LIKE :search_term
+                ORDER BY c.collection_name ASC";
+        
+        $this->db->query($sql);
+        $this->db->bind(':search_term', '%' . $searchTerm . '%');
+        return $this->db->resultSet();
+    }
+
+    /**
      * Tạo bộ sưu tập mới
      */
     public function create($data) {
@@ -294,20 +335,35 @@ class Collection extends BaseModel {
 
     /**
      * Xóa bộ sưu tập
+     * ⚠️ XÓA CẢ ẢNH LIÊN QUAN
      */
     public function delete($id) {
-        $sql = "DELETE FROM {$this->table} WHERE collection_id = :id";
-        $this->db->query($sql);
-        $this->db->bind(':id', $id);
-        return $this->db->execute();
+        try {
+            // BƯỚC 1: Xóa ảnh cover trước
+            $this->deleteCollectionCoverImage($id);
+            
+            // BƯỚC 2: Xóa collection khỏi database
+            $sql = "DELETE FROM {$this->table} WHERE collection_id = :id";
+            $this->db->query($sql);
+            $this->db->bind(':id', $id);
+            return $this->db->execute();
+            
+        } catch (Exception $e) {
+            error_log("Error deleting collection: " . $e->getMessage());
+            return false;
+        }
     }
 
     /**
      * Thêm cover image cho collection vào bảng images + image_usages
+     * ⚠️ CHỈ CHO PHÉP 1 ẢNH - XÓA ẢNH CŨ TRƯỚC KHI THÊM MỚI
      */
     public function addCollectionCover($collectionId, $imagePath) {
         try {
-            // 1. Thêm vào bảng images
+            // BƯỚC 1: XÓA ẢNH CŨ (nếu có) - ĐẢM BẢO CHỈ CÓ 1 ẢNH
+            $this->deleteCollectionCoverImage($collectionId);
+            
+            // BƯỚC 2: Thêm ảnh mới vào bảng images
             $fileName = basename($imagePath);
             $fileType = pathinfo($imagePath, PATHINFO_EXTENSION);
             
@@ -325,14 +381,7 @@ class Collection extends BaseModel {
             
             $imageId = $this->db->lastInsertId();
             
-            // 2. Xóa ảnh cũ nếu có (set is_primary = 0)
-            $sql = "UPDATE image_usages SET is_primary = 0 
-                    WHERE ref_type = 'collection' AND ref_id = :ref_id";
-            $this->db->query($sql);
-            $this->db->bind(':ref_id', $collectionId);
-            $this->db->execute();
-            
-            // 3. Thêm vào bảng image_usages
+            // BƯỚC 3: Thêm vào bảng image_usages với is_primary = 1
             $sql = "INSERT INTO image_usages (image_id, ref_type, ref_id, is_primary, created_at) 
                     VALUES (:image_id, 'collection', :ref_id, 1, NOW())";
             $this->db->query($sql);
@@ -363,23 +412,37 @@ class Collection extends BaseModel {
     }
 
     /**
+     * Đếm số lượng ảnh của collection
+     * ⚠️ CHỈ NÊN TRẢ VỀ 1 (ràng buộc business logic)
+     */
+    public function countCollectionImages($collectionId) {
+        $sql = "SELECT COUNT(*) as image_count FROM image_usages 
+                WHERE ref_type = 'collection' AND ref_id = :ref_id";
+        $this->db->query($sql);
+        $this->db->bind(':ref_id', $collectionId);
+        $result = $this->db->single();
+        return $result ? (int)$result->image_count : 0;
+    }
+
+    /**
      * Xóa ảnh cover của collection
+     * ⚠️ XÓA HOÀN TOÀN khỏi database và file vật lý
      */
     public function deleteCollectionCoverImage($collectionId) {
         try {
-            // 1. Lấy thông tin ảnh hiện tại
+            // BƯỚC 1: Lấy thông tin ảnh hiện tại
             $image = $this->getCollectionCoverImage($collectionId);
             
             if (!$image) {
                 return true; // Không có ảnh để xóa
             }
             
-            // 2. Xóa file vật lý
+            // BƯỚC 2: Xóa file vật lý
             if (file_exists($image->file_path)) {
-                unlink($image->file_path);
+                @unlink($image->file_path); // @ để tránh lỗi nếu file không tồn tại
             }
             
-            // 3. Xóa khỏi image_usages
+            // BƯỚC 3: Xóa khỏi image_usages
             $sql = "DELETE FROM image_usages 
                     WHERE ref_type = 'collection' AND ref_id = :ref_id AND image_id = :image_id";
             $this->db->query($sql);
@@ -387,12 +450,21 @@ class Collection extends BaseModel {
             $this->db->bind(':image_id', $image->image_id);
             $this->db->execute();
             
-            // 4. Xóa khỏi images
-            $sql = "DELETE FROM images WHERE image_id = :image_id";
+            // BƯỚC 4: Kiểm tra xem image_id này còn được dùng ở đâu không
+            $sql = "SELECT COUNT(*) as usage_count FROM image_usages WHERE image_id = :image_id";
             $this->db->query($sql);
             $this->db->bind(':image_id', $image->image_id);
+            $result = $this->db->single();
             
-            return $this->db->execute();
+            // BƯỚC 5: Nếu không còn được dùng ở đâu, XÓA khỏi bảng images
+            if ($result && $result->usage_count == 0) {
+                $sql = "DELETE FROM images WHERE image_id = :image_id";
+                $this->db->query($sql);
+                $this->db->bind(':image_id', $image->image_id);
+                $this->db->execute();
+            }
+            
+            return true;
             
         } catch (Exception $e) {
             error_log("Error deleting collection cover: " . $e->getMessage());

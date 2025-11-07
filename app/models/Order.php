@@ -115,23 +115,139 @@ class Order extends BaseModel {
         return $this->db->resultSet();
     }
 
+    /**
+     * Hard delete - Xóa vĩnh viễn đơn hàng khỏi database
+     * Xóa cả order_items và payments liên quan
+     */
     public function deleteById($id) {
-        // Soft delete by setting status to cancelled
-        $this->db->query("UPDATE " . $this->table . " SET order_status = 'cancelled', updated_at = NOW() WHERE order_id = :id");
-        $this->db->bind(':id', $id);
-        return $this->db->execute();
+        try {
+            // Bắt đầu transaction
+            $this->db->beginTransaction();
+            
+            // 1. Xóa order_items
+            $this->db->query("DELETE FROM order_items WHERE order_id = :order_id");
+            $this->db->bind(':order_id', $id);
+            $this->db->execute();
+            
+            // 2. Xóa payments
+            $this->db->query("DELETE FROM payments WHERE order_id = :order_id");
+            $this->db->bind(':order_id', $id);
+            $this->db->execute();
+            
+            // 3. Xóa order
+            $this->db->query("DELETE FROM " . $this->table . " WHERE order_id = :id");
+            $this->db->bind(':id', $id);
+            $result = $this->db->execute();
+            
+            // Commit transaction
+            $this->db->commit();
+            
+            error_log("✓ Order #$id deleted successfully (hard delete)");
+            return $result;
+            
+        } catch (Exception $e) {
+            // Rollback nếu có lỗi
+            $this->db->rollback();
+            error_log("✗ Error deleting order #$id: " . $e->getMessage());
+            return false;
+        }
     }
 
     /**
-     * Update payment status
+     * Update payment status in payments table
+     * Valid statuses: 'pending', 'completed', 'failed', 'refunded'
      */
     public function updatePaymentStatus($orderId, $status) {
-        $this->db->query("UPDATE " . $this->table . " 
-                         SET payment_status = :status, updated_at = NOW() 
-                         WHERE order_id = :order_id");
-        $this->db->bind(':status', $status);
+        try {
+            // Validate status theo enum trong database
+            $validStatuses = ['pending', 'completed', 'failed', 'refunded'];
+            if (!in_array($status, $validStatuses)) {
+                error_log("✗ Invalid payment status: $status");
+                return false;
+            }
+            
+            // Kiểm tra xem payment record có tồn tại không
+            $this->db->query("SELECT payment_id FROM payments WHERE order_id = :order_id");
+            $this->db->bind(':order_id', $orderId);
+            $payment = $this->db->single();
+            
+            if ($payment) {
+                // Payment record tồn tại - UPDATE
+                $this->db->query("UPDATE payments 
+                                 SET payment_status = :status,
+                                     paid_at = CASE WHEN :status = 'completed' THEN NOW() ELSE paid_at END
+                                 WHERE order_id = :order_id");
+                $this->db->bind(':status', $status);
+                $this->db->bind(':order_id', $orderId);
+                $result = $this->db->execute();
+                
+                if ($result) {
+                    error_log("✓ Payment status updated: Order #$orderId -> '$status'");
+                } else {
+                    error_log("✗ Failed to update payment status for order #$orderId");
+                }
+                
+                return $result;
+                
+            } else {
+                // Payment record KHÔNG tồn tại - INSERT mới
+                error_log("⚠ No payment record for order #$orderId, creating new one...");
+                
+                // Lấy thông tin order
+                $orderInfo = $this->findByOrderId($orderId);
+                if (!$orderInfo) {
+                    error_log("✗ Order #$orderId not found");
+                    return false;
+                }
+                
+                // Tạo payment record mới
+                $this->db->query("INSERT INTO payments 
+                                 (order_id, payment_method, payment_status, amount, created_at) 
+                                 VALUES (:order_id, 'CASH_STORE', :status, :amount, NOW())");
+                $this->db->bind(':order_id', $orderId);
+                $this->db->bind(':status', $status);
+                $this->db->bind(':amount', $orderInfo->total_amount ?? 0);
+                $result = $this->db->execute();
+                
+                if ($result) {
+                    error_log("✓ Created payment record: Order #$orderId with status '$status'");
+                } else {
+                    error_log("✗ Failed to create payment record for order #$orderId");
+                }
+                
+                return $result;
+            }
+            
+        } catch (Exception $e) {
+            error_log("❌ Error in updatePaymentStatus: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Get payment info for an order
+     */
+    public function getPaymentInfo($orderId) {
+        $this->db->query("SELECT * FROM payments WHERE order_id = :order_id LIMIT 1");
         $this->db->bind(':order_id', $orderId);
-        return $this->db->execute();
+        return $this->db->single();
+    }
+    
+    /**
+     * Get order with customer email for sending notifications
+     */
+    public function getOrderWithCustomerEmail($orderId) {
+        $this->db->query("SELECT o.*, 
+                         COALESCE(o.email, u.email) as customer_email,
+                         COALESCE(o.full_name, u.name) as customer_name,
+                         p.payment_method,
+                         p.payment_status
+                         FROM " . $this->table . " o 
+                         LEFT JOIN users u ON o.user_id = u.user_id 
+                         LEFT JOIN payments p ON o.order_id = p.order_id
+                         WHERE o.order_id = :order_id");
+        $this->db->bind(':order_id', $orderId);
+        return $this->db->single();
     }
 
     /**
@@ -163,17 +279,26 @@ class Order extends BaseModel {
         $this->db->query("SELECT o.*, 
                          u.name as user_name,
                          COALESCE(o.full_name, u.name) as customer_name,
-                         COALESCE(o.email, u.email) as customer_email
+                         COALESCE(o.email, u.email) as customer_email,
+                         p.payment_status,
+                         p.payment_method
                          FROM " . $this->table . " o 
                          LEFT JOIN users u ON o.user_id = u.user_id 
+                         LEFT JOIN payments p ON o.order_id = p.order_id
                          ORDER BY o.created_at DESC");
         return $this->db->resultSet();
     }
 
     public function getOrderDetails($orderId) {
-        $this->db->query("SELECT o.*, u.name as user_name, u.email as user_email 
+        $this->db->query("SELECT o.*, 
+                         u.name as user_name, 
+                         u.email as user_email,
+                         p.payment_status,
+                         p.payment_method,
+                         p.transaction_code
                          FROM " . $this->table . " o 
                          LEFT JOIN users u ON o.user_id = u.user_id 
+                         LEFT JOIN payments p ON o.order_id = p.order_id
                          WHERE o.order_id = :id");
         $this->db->bind(':id', $orderId);
         return $this->db->single();
