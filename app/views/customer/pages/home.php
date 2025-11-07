@@ -14,6 +14,7 @@
     <link href="<?= asset('css/css.css?v=' . time()) ?>" rel="stylesheet">
     
     <style>
+        /* Desktop categories */
         .category-item {
             cursor: pointer;
             transition: transform 0.3s ease;
@@ -31,6 +32,64 @@
         .category-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        /* Mobile categories slider */
+        .category-mobile-wrapper {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            padding: 0 15px;
+        }
+
+        .category-mobile-slider {
+            display: flex;
+            transition: transform 0.3s ease-in-out;
+            width: 100%;
+        }
+
+        .category-mobile-slide {
+            flex: 0 0 100%;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .category-mobile-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .category-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ddd;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .category-dot.active {
+            background-color: var(--gold);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        /* Touch slide animation */
+        .category-mobile-slider.sliding {
+            transition: none;
+        }
+
+        @media (max-width: 767px) {
+            .category-mobile-slide {
+                padding: 0 10px;
+            }
+            
+            .category-circle {
+                margin: 0 auto;
+            }
         }
     </style>
 
@@ -168,7 +227,9 @@
                 <h2 class="section-title">DANH MỤC</h2>
                 <div class="title-underline"></div>
             </div>
-            <div class="position-relative">
+
+            <!-- Desktop View -->
+            <div class="position-relative d-none d-md-block">
                 <div class="d-flex justify-content-center" id="categoryCarousel">
                     <?php if (isset($categories) && !empty($categories)): ?>
                         <?php foreach ($categories as $category): ?>
@@ -214,7 +275,58 @@
                         </div>
                     <?php endif; ?>
                 </div>
-                
+            </div>
+
+            <!-- Mobile View with Slider -->
+            <div class="position-relative d-block d-md-none">
+                <div class="category-mobile-wrapper">
+                    <div class="category-mobile-slider" id="categoryMobileSlider">
+                        <?php if (isset($categories) && !empty($categories)): ?>
+                            <?php foreach ($categories as $category): ?>
+                                <div class="category-mobile-slide" onclick="goToProducts('category', '<?= $category->category_id ?>')">
+                                    <div class="category-circle">
+                                        <img src="<?= isset($category->banner_image) ? $category->banner_image : 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=100&h=100&fit=crop' ?>" 
+                                             alt="<?= htmlspecialchars($category->category_name ?? $category->name ?? 'Category') ?>">
+                                    </div>
+                                    <p class="mt-2"><?= htmlspecialchars($category->category_name ?? $category->name ?? 'Category') ?></p>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <!-- Fallback static categories for mobile -->
+                            <div class="category-mobile-slide" onclick="goToProducts('category', 'necklaces')">
+                                <div class="category-circle">
+                                    <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=100&h=100&fit=crop" alt="Necklaces">
+                                </div>
+                                <p class="mt-2">Necklaces</p>
+                            </div>
+                            <div class="category-mobile-slide" onclick="goToProducts('category', 'earrings')">
+                                <div class="category-circle">
+                                    <img src="https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?w=100&h=100&fit=crop" alt="Earrings">
+                                </div>
+                                <p class="mt-2">Earrings</p>
+                            </div>
+                            <div class="category-mobile-slide" onclick="goToProducts('category', 'rings')">
+                                <div class="category-circle">
+                                    <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=100&h=100&fit=crop" alt="Rings">
+                                </div>
+                                <p class="mt-2">Rings</p>
+                            </div>
+                            <div class="category-mobile-slide" onclick="goToProducts('category', 'bracelets')">
+                                <div class="category-circle">
+                                    <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=100&h=100&fit=crop" alt="Bracelets">
+                                </div>
+                                <p class="mt-2">Bracelets</p>
+                            </div>
+                            <div class="category-mobile-slide" onclick="goToProducts('category', 'anklets')">
+                                <div class="category-circle">
+                                    <img src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=100&h=100&fit=crop" alt="Anklets">
+                                </div>
+                                <p class="mt-2">Anklets</p>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="category-mobile-dots" id="categoryMobileDots"></div>
+                </div>
             </div>
         </div>
     </section>
@@ -305,6 +417,101 @@
     
     <!-- Custom JavaScript -->
     <script>
+    // Mobile Categories Slider
+    let categoryCurrentSlide = 0;
+    let categoryTotalSlides = 0;
+    let categoryStartX = 0;
+    let categoryCurrentX = 0;
+    let categoryIsSwiping = false;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initCategoryMobileSlider();
+    });
+
+    function initCategoryMobileSlider() {
+        const slider = document.getElementById('categoryMobileSlider');
+        const dotsContainer = document.getElementById('categoryMobileDots');
+        
+        if (!slider || !dotsContainer) return;
+
+        const slides = slider.querySelectorAll('.category-mobile-slide');
+        categoryTotalSlides = slides.length;
+
+        // Create dots
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.className = `category-dot${index === 0 ? ' active' : ''}`;
+            dot.addEventListener('click', () => goToSlide(index));
+            dotsContainer.appendChild(dot);
+        });
+
+        // Touch events
+        slider.addEventListener('touchstart', handleTouchStart, { passive: true });
+        slider.addEventListener('touchmove', handleTouchMove, { passive: true });
+        slider.addEventListener('touchend', handleTouchEnd);
+
+        updateCategorySlider();
+    }
+
+    function handleTouchStart(e) {
+        categoryStartX = e.touches[0].clientX;
+        categoryCurrentX = categoryStartX;
+        categoryIsSwiping = true;
+        const slider = document.getElementById('categoryMobileSlider');
+        slider.classList.add('sliding');
+    }
+
+    function handleTouchMove(e) {
+        if (!categoryIsSwiping) return;
+        
+        categoryCurrentX = e.touches[0].clientX;
+        const diff = categoryCurrentX - categoryStartX;
+        const slider = document.getElementById('categoryMobileSlider');
+        
+        const transform = -categoryCurrentSlide * 100 + (diff / slider.offsetWidth * 100);
+        slider.style.transform = `translateX(${transform}%)`;
+    }
+
+    function handleTouchEnd() {
+        if (!categoryIsSwiping) return;
+        
+        const diff = categoryCurrentX - categoryStartX;
+        const slider = document.getElementById('categoryMobileSlider');
+        
+        slider.classList.remove('sliding');
+        
+        if (Math.abs(diff) > 50) {
+            if (diff > 0 && categoryCurrentSlide > 0) {
+                categoryCurrentSlide--;
+            } else if (diff < 0 && categoryCurrentSlide < categoryTotalSlides - 1) {
+                categoryCurrentSlide++;
+            }
+        }
+        
+        updateCategorySlider();
+        categoryIsSwiping = false;
+    }
+
+    function goToSlide(index) {
+        categoryCurrentSlide = index;
+        updateCategorySlider();
+    }
+
+    function updateCategorySlider() {
+        const slider = document.getElementById('categoryMobileSlider');
+        const dots = document.querySelectorAll('.category-dot');
+        
+        if (!slider || !dots.length) return;
+
+        // Update slider position
+        slider.style.transform = `translateX(-${categoryCurrentSlide * 100}%)`;
+        
+        // Update dots
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === categoryCurrentSlide);
+        });
+    }
+
     // Helper function to convert relative paths to absolute URLs
         function getAssetUrl(path) {
             // base path for this app (e.g. /Ecom_website or '')
