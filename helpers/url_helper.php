@@ -93,6 +93,3 @@ function route($route, $params = []) {
     }
     return $url;
 }
-
-
-?>

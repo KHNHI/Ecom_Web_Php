@@ -1,10 +1,16 @@
 
 
 <?php
-require_once __DIR__ . '/../../core/BaseController.php';
+// Clear any previous output to prevent header issues
+while (ob_get_level()) {
+    ob_end_clean();
+}
+
+require_once __DIR__ . '/../../core/BaseController.php'; 
 require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../../helpers/email_helper.php';
 require_once __DIR__ . '/../../helpers/session_helper.php';
+require_once __DIR__ . '/../../helpers/url_helper.php';
 
 
 class AuthController extends BaseController {
@@ -32,6 +38,14 @@ class AuthController extends BaseController {
      * Handle sign up registration
      */
     public function signUp() {
+        // Clear any previous output
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+        
+        // Set JSON header immediately
+        header('Content-Type: application/json; charset=utf-8');
+        
         try {
             // Debug log
             error_log("SignUp method called");
@@ -103,49 +117,77 @@ class AuthController extends BaseController {
      * Handle sign in authentication
      */
     public function signIn() {
+        // Clear any previous output and set encoding
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+        
+        // Set proper encoding
+        if (function_exists('mb_internal_encoding')) {
+            mb_internal_encoding('UTF-8');
+        }
+        
+        // Set headers with proper encoding
+        header('Content-Type: application/json; charset=utf-8');
+        header('Cache-Control: no-cache, must-revalidate');
+        
         try {
+            error_log("SignIn method called with POST data: " . print_r($_POST, true));
+            
             // Validate input
             $errors = $this->validateSignInData($_POST);
             if (!empty($errors)) {
+                error_log("Validation errors: " . print_r($errors, true));
                 $this->jsonResponse(false, 'Dữ liệu không hợp lệ', $errors);
                 return;
             }
 
             $email = trim($_POST['email']);
             $password = $_POST['password'];
+            error_log("Processing signin for email: " . $email);
 
             // Find user by email
             $user = $this->userModel->findByEmail($email);
             
             if (!$user) {
+                error_log("User not found for email: " . $email);
                 $this->jsonResponse(false, 'Email hoặc mật khẩu không đúng');
                 return;
             }
 
+            error_log("User found: " . $user->email . ", is_active: " . ($user->is_active ? 'true' : 'false'));
+
             // Verify password
             if (!password_verify($password, $user->password_hash)) {
+                error_log("Password verification failed for user: " . $email);
                 $this->jsonResponse(false, 'Email hoặc mật khẩu không đúng');
                 return;
             }
 
             // Check if email is verified
             if (!$user->is_active) {
+                error_log("User not active: " . $email);
                 $this->jsonResponse(false, 'Tài khoản chưa được xác thực email. Vui lòng kiểm tra email của bạn.');
                 return;
             }
 
             // Create session
+            error_log("Creating session for user: " . $user->email);
             $this->createUserSession($user);
 
             // Load user's previous cart from database
+            error_log("Loading cart for user: " . $user->user_id);
             $this->loadUserCartFromDatabase($user->user_id);
 
+            $redirectUrl = url('/');
+            error_log("Signin successful, redirecting to: " . $redirectUrl);
+            
             $this->jsonResponse(true, 'Đăng nhập thành công', [
-                'redirect' => '/Ecom_website/'
+                'redirect' => $redirectUrl
             ]);
 
         } catch (Exception $e) {
-            error_log("SignUp Error: " . $e->getMessage());
+            error_log("SignIn Error: " . $e->getMessage() . "\nTrace: " . $e->getTraceAsString());
             $this->jsonResponse(false, 'Có lỗi hệ thống xảy ra: ' . $e->getMessage());
         }
     }
@@ -219,7 +261,7 @@ class AuthController extends BaseController {
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
             $this->jsonResponse(true, 'Đăng xuất thành công');
         } else {
-            header('Location: /Ecom_website/signin');
+            header('Location: ' . url('signin'));
             exit;
         }
     }

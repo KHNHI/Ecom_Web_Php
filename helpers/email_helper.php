@@ -9,6 +9,50 @@ use PHPMailer\PHPMailer\Exception;
 class EmailHelper {
     
     /**
+     * Get base URL dynamically based on current environment
+     */
+    private static function getBaseUrl() {
+        // Check if we're in HTTPS
+        $serverPort = $_SERVER['SERVER_PORT'] ?? 80;
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || 
+                   $serverPort == 443 ? 'https://' : 'http://';
+        
+        // Get host
+        $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? 'localhost';
+        
+        // Detect project path
+        $projectPath = '';
+        
+        // Check different sources for project path detection
+        $requestUri = $_SERVER['REQUEST_URI'] ?? '';
+        $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+        $phpSelf = $_SERVER['PHP_SELF'] ?? '';
+        
+        // Method 1: From REQUEST_URI (most reliable)
+        if ($requestUri && strpos($requestUri, '/Ecom_website/') !== false) {
+            $projectPath = '/Ecom_website';
+        }
+        // Method 2: From SCRIPT_NAME
+        elseif ($scriptName && strpos($scriptName, '/Ecom_website/') !== false) {
+            $projectPath = '/Ecom_website';
+        }
+        // Method 3: From PHP_SELF
+        elseif ($phpSelf && strpos($phpSelf, '/Ecom_website/') !== false) {
+            $projectPath = '/Ecom_website';
+        }
+        // Method 4: Check current directory structure
+        elseif (defined('BASE_URL')) {
+            $projectPath = BASE_URL;
+        }
+        // Method 5: Default for localhost
+        elseif ($host === 'localhost' || strpos($host, 'localhost') !== false) {
+            $projectPath = '/Ecom_website';
+        }
+        
+        return $protocol . $host . $projectPath;
+    }
+    
+    /**
      * Gửi email sử dụng PHPMailer với SMTP
      */
     public static function sendEmail($to, $subject, $message) {
@@ -74,8 +118,9 @@ class EmailHelper {
     public static function sendVerificationEmail($email, $token) {
         $subject = "Xác thực tài khoản của bạn";
         
-        // URL verification link
-        $verificationLink = "http://localhost/Ecom_website/auth/verify?token=" . $token;
+        // Dynamic URL verification link
+        $baseUrl = self::getBaseUrl();
+        $verificationLink = $baseUrl . "/auth/verify?token=" . $token;
         
         $message = "
         <html>
@@ -124,8 +169,9 @@ class EmailHelper {
     public static function sendResetPasswordEmail($email, $token) {
         $subject = "Đặt lại mật khẩu - " . SMTP_FROM_NAME;
         
-        // Reset password link
-        $resetLink = "http://localhost/Ecom_website/reset-password?token=" . $token;
+        // Dynamic reset password link
+        $baseUrl = self::getBaseUrl();
+        $resetLink = $baseUrl . "/reset-password?token=" . $token;
         
         $message = "
         <html>
@@ -221,6 +267,14 @@ class EmailHelper {
      */
     public static function generateResetToken() {
         return bin2hex(random_bytes(32));
+    }
+    
+    /**
+     * Test method to check what base URL is being generated
+     * Remove this after deployment
+     */
+    public static function testBaseUrl() {
+        return self::getBaseUrl();
     }
 }
 ?>

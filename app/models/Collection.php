@@ -289,7 +289,6 @@ class Collection extends BaseModel {
         $this->db->bind(':description', $data['description'] ?? '');
         $this->db->bind(':is_active', $data['is_active'] ?? 1);
         $this->db->bind(':id', $id);
-        
         return $this->db->execute();
     }
 

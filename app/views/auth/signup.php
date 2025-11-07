@@ -285,7 +285,7 @@
                             <p class="auth-subtitle">Tham gia cộng đồng yêu thích trang sức cao cấp</p>
                             <div class="mt-4">
                                 <p class="mb-2">Đã có tài khoản?</p>
-                                <a href="/Ecom_website/signin" class="btn btn-outline-light">
+                                <a href="<?= BASE_URL ?>/signin" class="btn btn-outline-light">
                                     <i class="fas fa-sign-in-alt me-2"></i>Đăng nhập
                                 </a>
                             </div>
@@ -371,7 +371,7 @@
                         <!-- Mobile login prompt - only shows on small screens -->
                         <div class="signup-prompt-mobile">
                             <p class="mb-2">Đã có tài khoản?</p>
-                            <a href="/Ecom_website/signin" class="btn btn-outline-gold">
+                            <a href="<?= BASE_URL ?>/signin" class="btn btn-outline-gold">
                                 <i class="fas fa-sign-in-alt me-2"></i>Đăng nhập
                             </a>
                         </div>
@@ -493,7 +493,11 @@
             const formData = new FormData(this);
             
             try {
-                const response = await fetch('/Ecom_website/auth/signup', {
+                // Get base path dynamically
+                const basePath = window.location.pathname.includes('/Ecom_website/') ? '/Ecom_website' : '';
+                const signupUrl = basePath + '/auth/signup';
+                
+                const response = await fetch(signupUrl, {
                     method: 'POST',
                     body: formData
                 });

@@ -4,10 +4,21 @@ $cartItems = $data['cartItems'] ?? [];
 $cartSummary = $data['cartSummary'] ?? [];
 $userInfo = $data['userInfo'] ?? null;
 ?>
-    </div>
-    </div>
-    </div>
-    </div>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= $title ?> - Jewelry Store</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="<?= asset('css/css.css?v=' . time()) ?>" rel="stylesheet">
+</head>
+<body>
     
     <!-- Loading Modal -->
     <div class="modal fade" id="loadingModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -23,12 +34,23 @@ $userInfo = $data['userInfo'] ?? null;
         </div>
     </div>
     <style>
+        :root {
+            --gold: #d4af37;
+            --dark-gold: #b8941f;
+            --light-gold: #f0e68c;
+            --cream: #f8f6f0;
+            --dark-brown: #3a2f28;
+            --light-gray: #f5f5f5;
+        }
+        
         body {
             background-color: var(--cream);
             background-image: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.755)),
                 url("https://images.unsplash.com/photo-1608042314453-ae338d80c427?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fGpld2Vscnl8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=600");
             background-size: cover;
             background-attachment: fixed;
+            font-family: "Inter", "Playfair Display", serif;
+            color: var(--dark-brown);
         }
         
         .checkout-header {
@@ -791,7 +813,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Delivery method change handler
     deliveryMethods.forEach(method => {
         method.addEventListener('change', function() {
-            console.log('Payment method changed to:', this.value);
             toggleDeliveryMethod(this.value);
         });
     });
@@ -803,24 +824,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function toggleDeliveryMethod(method) {
-        console.log('Toggling delivery method:', method);
-        console.log('Bank info element:', bankInfo);
-        console.log('Store info element:', storeInfo);
-        console.log('Address fields element:', addressFields);
-        
         if (method === 'bank_transfer_home') {
             // Show bank info and address fields, hide store info
             if (bankInfo) {
                 bankInfo.style.display = 'block';
-                console.log('Showing bank info');
             }
             if (storeInfo) {
                 storeInfo.style.display = 'none';
-                console.log('Hiding store info');
             }
             if (addressFields) {
                 addressFields.style.display = 'block';
-                console.log('Showing address fields');
                 // Make address fields required
                 addressFields.querySelectorAll('input, select').forEach(field => {
                     field.required = true;
@@ -830,15 +843,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show store info, hide bank info and address fields
             if (bankInfo) {
                 bankInfo.style.display = 'none';
-                console.log('Hiding bank info');
             }
             if (storeInfo) {
                 storeInfo.style.display = 'block';
-                console.log('Showing store info');
             }
             if (addressFields) {
                 addressFields.style.display = 'none';
-                console.log('Hiding address fields');
                 // Remove required from address fields
                 addressFields.querySelectorAll('input, select').forEach(field => {
                     field.required = false;
@@ -973,17 +983,61 @@ document.addEventListener('DOMContentLoaded', function() {
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-
+            
             // Custom validation for dynamic fields
             const paymentMethod = document.querySelector('input[name="payment_delivery_method"]:checked');
+            
             if (!paymentMethod) {
                 showNotification('Vui lòng chọn phương thức thanh toán và nhận hàng', 'error');
                 e.stopPropagation();
                 return;
             }
 
-            // Validate address fields only for bank_transfer_home
-            if (paymentMethod.value === 'bank_transfer_home') {
+            // Handle address field validation based on payment method
+            const addressFields = document.getElementById('addressFields');
+            const addressInputs = addressFields ? addressFields.querySelectorAll('input, select') : [];
+            let skipFormValidation = false;
+            
+            if (paymentMethod.value === 'cash_store') {
+                // For cash_store, temporarily disable and clear address fields to avoid validation
+                addressInputs.forEach(field => {
+                    field.disabled = true; // Disable to skip HTML5 validation
+                    field.value = ''; // Clear values so they won't be sent
+                    field.classList.remove('is-invalid', 'is-valid'); // Remove validation classes
+                });
+                
+                // Manual validation for required fields (excluding address fields)
+                const requiredFields = form.querySelectorAll('input[required]:not([disabled]), select[required]:not([disabled]), textarea[required]:not([disabled])');
+                let hasValidationError = false;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        field.classList.add('is-invalid');
+                        hasValidationError = true;
+                    } else {
+                        field.classList.remove('is-invalid');
+                        field.classList.add('is-valid');
+                    }
+                });
+                
+                if (hasValidationError) {
+                    // Re-enable address fields
+                    addressInputs.forEach(field => {
+                        field.disabled = false;
+                    });
+                    showNotification('Vui lòng điền đầy đủ thông tin bắt buộc', 'error');
+                    form.classList.add('was-validated');
+                    return;
+                }
+                
+                skipFormValidation = true; // Skip HTML5 validation for cash_store
+                
+            } else if (paymentMethod.value === 'bank_transfer_home') {
+                // For bank_transfer_home, ensure address fields are enabled and validate them
+                addressInputs.forEach(field => {
+                    field.disabled = false;
+                });
+                
                 const province = document.getElementById('province')?.value;
                 const ward = document.getElementById('ward')?.value;
                 const address = document.querySelector('input[name="address"]')?.value;
@@ -992,15 +1046,47 @@ document.addEventListener('DOMContentLoaded', function() {
                     showNotification('Vui lòng điền đầy đủ thông tin địa chỉ giao hàng', 'error');
                     e.stopPropagation();
                     form.classList.add('was-validated');
+                    
+                    // Highlight missing fields
+                    if (!province) document.getElementById('province')?.classList.add('is-invalid');
+                    if (!ward) document.getElementById('ward')?.classList.add('is-invalid');
+                    if (!address?.trim()) document.querySelector('input[name="address"]')?.classList.add('is-invalid');
+                    
                     return;
                 }
+                
+                // Manual validation for all required fields
+                const allRequiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
+                let hasValidationError = false;
+                
+                allRequiredFields.forEach(field => {
+                    const value = field.value.trim();
+                    
+                    if (!value) {
+                        field.classList.add('is-invalid');
+                        hasValidationError = true;
+                    } else {
+                        field.classList.remove('is-invalid');
+                        field.classList.add('is-valid');
+                    }
+                });
+                
+                if (hasValidationError) {
+                    showNotification('Vui lòng điền đầy đủ thông tin bắt buộc', 'error');
+                    form.classList.add('was-validated');
+                    return;
+                }
+                
+                skipFormValidation = true; // Use manual validation instead of HTML5
             }
 
-            // Validate form
-            if (!form.checkValidity()) {
-                e.stopPropagation();
-                form.classList.add('was-validated');
-                return;
+            // Validate form (only if not skipped)
+            if (!skipFormValidation) {
+                if (!form.checkValidity()) {
+                    e.stopPropagation();
+                    form.classList.add('was-validated');
+                    return;
+                }
             }
 
             // Show loading modal if available
@@ -1010,16 +1096,37 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData(form);
 
             // Submit checkout
-            fetch('<?= url('/checkout/process') ?>', {
+            const checkoutUrl = '<?= url('checkout/process') ?>';
+            
+            fetch(checkoutUrl, {
                 method: 'POST',
                 body: formData,
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                return response.text().then(text => {
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        throw new Error('Server returned invalid JSON: ' + text.substring(0, 100));
+                    }
+                });
+            })
             .then(data => {
                 if (loadingModal) loadingModal.hide();
+                
+                // Re-enable address fields after request completes
+                if (paymentMethod.value === 'cash_store') {
+                    addressInputs.forEach(field => {
+                        field.disabled = false;
+                    });
+                }
 
                 if (data.success) {
                     Swal.fire({
@@ -1055,11 +1162,19 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 if (loadingModal) loadingModal.hide();
-                console.error('Error:', error);
+                
+                // Re-enable address fields on error
+                if (paymentMethod.value === 'cash_store') {
+                    addressInputs.forEach(field => {
+                        field.disabled = false;
+                    });
+                }
+
+                
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi kết nối',
-                    text: 'Không thể kết nối đến máy chủ. Vui lòng thử lại.',
+                    text: 'Không thể kết nối đến máy chủ: ' + error.message,
                     confirmButtonText: 'Thử lại',
                     confirmButtonColor: '#dc3545'
                 });

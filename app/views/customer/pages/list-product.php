@@ -272,7 +272,8 @@ if (!function_exists('url')) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     
     <!-- Material Filter JS -->
-    <script src="http://localhost/Ecom_website/public/assets/js/material-filter.js"></script>
+    <script src="<?= asset('js/material-filter.js') ?>"></script>
+    
 
     <script>
         // Load current filters from URL on page load

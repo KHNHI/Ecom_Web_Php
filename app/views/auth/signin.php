@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../../../helpers/url_helper.php'; ?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -282,7 +283,7 @@
                             <p class="auth-subtitle">Khám phá bộ sưu tập trang sức cao cấp của chúng tôi</p>
                             <div class="mt-4">
                                 <p class="mb-2">Chưa có tài khoản?</p>
-                                <a href="/Ecom_website/signup" class="btn btn-outline-light">
+                                <a href="<?= url('signup') ?>" class="btn btn-outline-light">
                                     <i class="fas fa-user-plus me-2"></i>Đăng ký ngay
                                 </a>
                             </div>
@@ -331,7 +332,7 @@
                         <!-- Mobile signup prompt - only shows on small screens -->
                         <div class="signup-prompt-mobile">
                             <p class="mb-2">Chưa có tài khoản?</p>
-                            <a href="/Ecom_website/signup" class="btn btn-outline-gold">
+                            <a href="<?= url('signup') ?>" class="btn btn-outline-gold">
                                 <i class="fas fa-user-plus me-2"></i>Đăng ký ngay
                             </a>
                         </div>
@@ -404,12 +405,39 @@
             const formData = new FormData(this);
             
             try {
-                const response = await fetch('/Ecom_website/auth/signin', {
+                console.log('Sending request to:', '<?= url('auth/signin') ?>');
+                const response = await fetch('<?= url('auth/signin') ?>', {
                     method: 'POST',
                     body: formData
                 });
                 
-                const result = await response.json();
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const responseText = await response.text();
+                console.log('Raw response length:', responseText.length);
+                console.log('Raw response content:', responseText);
+                console.log('Response starts with:', responseText.substring(0, 50));
+                console.log('Response ends with:', responseText.substring(responseText.length - 50));
+                
+                // Check if response is empty
+                if (!responseText.trim()) {
+                    throw new Error('Server returned empty response');
+                }
+                
+                let result;
+                try {
+                    result = JSON.parse(responseText);
+                    console.log('Parsed JSON result:', result);
+                } catch (parseError) {
+                    console.error('JSON parse error:', parseError);
+                    console.error('Failed to parse:', responseText);
+                    throw new Error('Server returned invalid JSON. Raw response: ' + responseText);
+                }
                 
                 if (result.success) {
                     showAlert('Đăng nhập thành công! Đang chuyển hướng...', 'success');
@@ -417,7 +445,7 @@
                         if (result.data && result.data.redirect) {
                             window.location.href = result.data.redirect;
                         } else {
-                            window.location.href = '/Ecom_website/';
+                            window.location.href = '<?= url('/') ?>';
                         }
                     }, 1500);
                 } else {
@@ -431,8 +459,10 @@
                     }
                 }
             } catch (error) {
-                console.error('Error:', error);
-                showAlert('Có lỗi xảy ra khi kết nối đến server!');
+                console.error('Full error details:', error);
+                console.error('Error message:', error.message);
+                console.error('Error type:', error.name);
+                showAlert('Lỗi: ' + error.message);
             } finally {
                 // Hide loading
                 submitBtn.disabled = false;

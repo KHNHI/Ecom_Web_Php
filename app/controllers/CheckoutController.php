@@ -62,24 +62,35 @@ class CheckoutController extends BaseController {
      * Process checkout
      */
     public function process() {
+        // Ensure JSON response headers
+        if (!headers_sent()) {
+            header('Content-Type: application/json; charset=utf-8');
+        }
+        
         try {
+            error_log("CheckoutController::process() started");
+            error_log("POST data: " . print_r($_POST, true));
+            
             // Validate cart or buy now item
             if (!isset($_SESSION['cart']) && !isset($_SESSION['buy_now_item'])) {
+                error_log("No cart or buy_now_item in session");
                 $this->jsonResponse(false, 'Không có sản phẩm để thanh toán');
                 return;
             }
 
             if (!isset($_SESSION['buy_now_item']) && (empty($_SESSION['cart']))) {
+                error_log("Empty cart");
                 $this->jsonResponse(false, 'Giỏ hàng trống');
                 return;
             }
 
-        // Validate form data
-        $errors = $this->validateCheckoutData($_POST);
-        if (!empty($errors)) {
-            $this->jsonResponse(false, 'Dữ liệu không hợp lệ', $errors);
-            return;
-        }
+            // Validate form data
+            $errors = $this->validateCheckoutData($_POST);
+            if (!empty($errors)) {
+                error_log("Validation errors: " . print_r($errors, true));
+                $this->jsonResponse(false, 'Dữ liệu không hợp lệ', $errors);
+                return;
+            }
 
         // Get payment delivery method
         $paymentDeliveryMethod = $_POST['payment_delivery_method'] ?? 'bank_transfer_home';
@@ -125,6 +136,8 @@ class CheckoutController extends BaseController {
             $orderId = $this->createOrder($customerInfo, $cartItems, $cartSummary, $paymentDeliveryMethod);
 
             if ($orderId) {
+                error_log("Order created successfully with ID: " . $orderId);
+                
                 // Clear appropriate session data after successful order
                 if (isset($_SESSION['buy_now_item'])) {
                     unset($_SESSION['buy_now_item']);
@@ -134,15 +147,17 @@ class CheckoutController extends BaseController {
 
                 $this->jsonResponse(true, 'Đặt hàng thành công!', [
                     'order_id' => $orderId,
-                    'redirect' => '/Ecom_website/order-success/' . $orderId
+                    'redirect' => url('/order-success?order_id=' . $orderId)
                 ]);
             } else {
+                error_log("Failed to create order");
                 $this->jsonResponse(false, 'Có lỗi xảy ra khi tạo đơn hàng');
             }
 
         } catch (Exception $e) {
             error_log("Checkout Error: " . $e->getMessage());
-            $this->jsonResponse(false, 'Có lỗi hệ thống xảy ra');
+            error_log("Stack trace: " . $e->getTraceAsString());
+            $this->jsonResponse(false, 'Có lỗi hệ thống xảy ra: ' . $e->getMessage());
         }
     }
 

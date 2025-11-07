@@ -18,7 +18,6 @@ if (!function_exists('url')) {
     <link href="<?= asset('css/css.css?v=' . time()) ?>" rel="stylesheet">
     <!-- SweetAlert2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">  
-    
 </head>
 <body>
     <!-- Header -->
