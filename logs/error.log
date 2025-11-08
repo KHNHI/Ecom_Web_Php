@@ -282,3 +282,31 @@ error:1416F086:SSL routines:tls_process_server_certificate:certificate verify fa
 [2025-11-05 13:22:12] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
  in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
 --------------------------------------------------------------------------------
+[2025-11-07 18:03:07] Error: file_get_contents(): php_network_getaddresses: getaddrinfo failed: No such host is known.  in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-07 18:03:07] Error: file_get_contents(https://provinces.open-api.vn/api/v2/p/): Failed to open stream: php_network_getaddresses: getaddrinfo failed: No such host is known.  in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-07 18:03:07] Error: file_get_contents(): php_network_getaddresses: getaddrinfo failed: No such host is known.  in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-07 18:03:07] Error: file_get_contents(https://vapi.vnappmob.com/api/province/p/): Failed to open stream: php_network_getaddresses: getaddrinfo failed: No such host is known.  in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-07 18:03:07] Error: file_get_contents(): php_network_getaddresses: getaddrinfo failed: No such host is known.  in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-07 18:03:07] Error: file_get_contents(http://provinces.open-api.vn/api/v2/p/): Failed to open stream: php_network_getaddresses: getaddrinfo failed: No such host is known.  in C:\xampp\htdocs\Ecom_website\app\controllers\LocationController.php on line 127
+--------------------------------------------------------------------------------
+[2025-11-07 18:46:10] Error: Undefined array key "full_name" in C:\xampp\htdocs\Ecom_website\app\models\User.php on line 370
+--------------------------------------------------------------------------------
+[2025-11-07 18:46:10] Error: Undefined array key "phone" in C:\xampp\htdocs\Ecom_website\app\models\User.php on line 371
+--------------------------------------------------------------------------------
+[2025-11-07 18:46:11] Error: Undefined array key "full_name" in C:\xampp\htdocs\Ecom_website\app\models\User.php on line 370
+--------------------------------------------------------------------------------
+[2025-11-07 18:46:11] Error: Undefined array key "phone" in C:\xampp\htdocs\Ecom_website\app\models\User.php on line 371
+--------------------------------------------------------------------------------
+[2025-11-07 18:46:11] Error: Undefined array key "full_name" in C:\xampp\htdocs\Ecom_website\app\models\User.php on line 370
+--------------------------------------------------------------------------------
+[2025-11-07 18:46:11] Error: Undefined array key "phone" in C:\xampp\htdocs\Ecom_website\app\models\User.php on line 371
+--------------------------------------------------------------------------------
+[2025-11-07 18:46:18] Error: Undefined array key "full_name" in C:\xampp\htdocs\Ecom_website\app\models\User.php on line 370
+--------------------------------------------------------------------------------
+[2025-11-07 18:46:18] Error: Undefined array key "phone" in C:\xampp\htdocs\Ecom_website\app\models\User.php on line 371
+--------------------------------------------------------------------------------
