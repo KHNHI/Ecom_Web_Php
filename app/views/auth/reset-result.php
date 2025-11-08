@@ -198,11 +198,44 @@
         .action-buttons {
             margin-top: 20px;
         }
+
+        .mt-4 a {
+            color: var(--dark-brown);
+            opacity: 0.7;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .mt-4 a:hover {
+            color: var(--gold);
+            opacity: 1;
+        }
         
         @media (max-width: 576px) {
             .btn-primary, .btn-secondary {
                 width: 100%;
-                margin: 5px 0;
+                margin: 8px 0;
+            }
+
+            .result-card {
+                margin: 15px;
+            }
+
+            .result-header {
+                padding: 35px 20px;
+            }
+
+            .result-icon {
+                font-size: 3rem;
+            }
+
+            .result-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .result-message {
+                font-size: 1rem;
             }
         }
     </style>
