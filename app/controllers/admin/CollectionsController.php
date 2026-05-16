@@ -87,7 +87,7 @@ class CollectionsController extends BaseController {
 
         } catch (Exception $e) {
             $_SESSION['error'] = 'Có lỗi xảy ra: ' . $e->getMessage();
-            $this->redirect('index.php?url=collections');
+            $this->redirect(BASE_URL . '/admin/collections');
         }
     }
 
@@ -99,7 +99,7 @@ class CollectionsController extends BaseController {
         // Chỉ chấp nhận POST request
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $_SESSION['error'] = 'Invalid request method!';
-            $this->redirect('index.php?url=collections');
+            $this->redirect(BASE_URL . '/admin/collections');
             return;
         }
 
@@ -110,7 +110,7 @@ class CollectionsController extends BaseController {
             if (!empty($validationErrors)) {
                 $_SESSION['error'] = implode('<br>', $validationErrors);
                 $_SESSION['old_input'] = $_POST;
-                $this->redirect('index.php?url=add-collection');
+                $this->redirect(BASE_URL . '/admin/add-collection');
                 return;
             }
 
@@ -123,7 +123,7 @@ class CollectionsController extends BaseController {
                 $_SESSION['error'] = "Bộ sưu tập '<strong>" . htmlspecialchars($collectionName) . "</strong>' đã tồn tại! Vui lòng sử dụng tên khác.";
                 $_SESSION['old_input'] = $_POST;
                 error_log("Collection creation failed: Name already exists - $collectionName");
-                $this->redirect('index.php?url=add-collection');
+                $this->redirect(BASE_URL . '/admin/add-collection');
                 return;
             }
 
@@ -154,13 +154,13 @@ class CollectionsController extends BaseController {
             $_SESSION['success'] = 'Tạo bộ sưu tập thành công!';
             error_log("Collection created successfully with ID: $collectionId");
             
-            $this->redirect('index.php?url=collections');
+            $this->redirect(BASE_URL . '/admin/collections');
             
         } catch (Exception $e) {
             $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
             $_SESSION['old_input'] = $_POST;
             error_log('CollectionsController::create Error: ' . $e->getMessage());
-            $this->redirect('index.php?url=add-collection');
+            $this->redirect(BASE_URL . '/admin/add-collection');
         }
     }
 
@@ -198,7 +198,7 @@ class CollectionsController extends BaseController {
 
         } catch (Exception $e) {
             $_SESSION['error'] = $e->getMessage();
-            $this->redirect('index.php?url=collections');
+            $this->redirect(BASE_URL . '/admin/collections');
         }
     }
 
@@ -209,7 +209,7 @@ class CollectionsController extends BaseController {
     public function update() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $_SESSION['error'] = 'Invalid request method!';
-            $this->redirect('index.php?url=collections');
+            $this->redirect(BASE_URL . '/admin/collections');
             return;
         }
 
@@ -225,7 +225,7 @@ class CollectionsController extends BaseController {
             
             if (!empty($validationErrors)) {
                 $_SESSION['error'] = implode('<br>', $validationErrors);
-                $this->redirect('index.php?url=edit-collection&id=' . $collectionId);
+                $this->redirect(BASE_URL . '/admin/edit-collection?id=' . $collectionId);
                 return;
             }
 
@@ -237,7 +237,7 @@ class CollectionsController extends BaseController {
             if ($existing) {
                 $_SESSION['error'] = "Tên bộ sưu tập '<strong>" . htmlspecialchars($collectionName) . "</strong>' đã được sử dụng! Vui lòng chọn tên khác.";
                 error_log("Collection update failed: Name already exists - $collectionName (excluding ID: $collectionId)");
-                $this->redirect('index.php?url=edit-collection&id=' . $collectionId);
+                $this->redirect(BASE_URL . '/admin/edit-collection?id=' . $collectionId);
                 return;
             }
 
@@ -260,7 +260,7 @@ class CollectionsController extends BaseController {
                     
                     if (!$uploadResult['success']) {
                         $_SESSION['error'] = 'Cập nhật thành công nhưng có lỗi khi upload ảnh: ' . implode(', ', $uploadResult['errors']);
-                        $this->redirect('index.php?url=collections');
+                        $this->redirect(BASE_URL . '/admin/collections');
                         return;
                     }
                 } elseif (!$keepExistingImage) {
@@ -277,7 +277,7 @@ class CollectionsController extends BaseController {
             error_log('CollectionsController::update Error: ' . $e->getMessage());
         }
         
-        $this->redirect('index.php?url=collections');
+        $this->redirect(BASE_URL . '/admin/collections');
     }
 
     /**
@@ -313,7 +313,7 @@ class CollectionsController extends BaseController {
             $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
         }
         
-        $this->redirect('index.php?url=collections');
+        $this->redirect(BASE_URL . '/admin/collections');
     }
 
     /**
@@ -336,7 +336,7 @@ class CollectionsController extends BaseController {
             $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
         }
         
-        $this->redirect('index.php?url=collections');
+        $this->redirect(BASE_URL . '/admin/collections');
     }
 
     /**

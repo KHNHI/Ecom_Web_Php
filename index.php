@@ -15,8 +15,18 @@ if (!is_dir(__DIR__ . '/logs')) {
     mkdir(__DIR__ . '/logs', 0777, true);
 }
 
+// Load configs first (needed for BASE_URL)
 foreach (glob(__DIR__ . '/configs/*.php') as $file) {
     require_once $file;
+}
+
+// Detect admin routes and delegate to admin/index.php
+$requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+$baseUrl = defined('BASE_URL') ? BASE_URL : '';
+$relativePath = $baseUrl ? substr($requestPath, strlen($baseUrl)) : $requestPath;
+if (preg_match('#^/admin(/|$)#', $relativePath)) {
+    require_once __DIR__ . '/admin/index.php';
+    exit;
 }
 foreach (glob(__DIR__ . '/core/*.php') as $file) {
     require_once $file;

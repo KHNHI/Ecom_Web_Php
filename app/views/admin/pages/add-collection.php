@@ -22,8 +22,8 @@ unset($_SESSION['old_input']);
 
 // Xác định action URL
 $formAction = $isEdit 
-    ? "index.php?url=collections&action=update&id={$collection->collection_id}"
-    : "index.php?url=collections&action=create";
+    ? "<?= BASE_URL ?>/admin/collections?action=update&id={$collection->collection_id}"
+    : "<?= BASE_URL ?>/admin/collections?action=create";
 ?>
 
 <!DOCTYPE html>
@@ -45,6 +45,7 @@ $formAction = $isEdit
     <link rel="stylesheet" href="app/views/admin/assets/css/add-collection.css">
 </head>
 <body>
+    <script>var APP_BASE_URL = '<?= BASE_URL ?>';</script>
     <div class="admin-wrapper">
         <!-- Sidebar Component Container -->
         <div id="sidebar-container"></div>
@@ -172,7 +173,7 @@ $formAction = $isEdit
                                         <div class="existing-image mb-3" id="existingImageContainer">
                                             <h6 class="fw-bold mb-2">Ảnh Hiện Tại</h6>
                                             <div class="position-relative">
-                                                <img src="/Ecom_website/<?= htmlspecialchars($collection->image_path) ?>" 
+                                                <img src="<?= BASE_URL ?>/<?= htmlspecialchars($collection->image_path) ?>" 
                                                      class="img-thumbnail w-100" 
                                                      alt="Collection Cover"
                                                      style="max-height: 200px; object-fit: cover;">
@@ -238,7 +239,7 @@ $formAction = $isEdit
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex gap-2 justify-content-end">
-                                <button type="button" class="btn btn-outline-secondary btn-custom px-4" onclick="window.location.href='index.php?url=collections'">
+                                <button type="button" class="btn btn-outline-secondary btn-custom px-4" onclick="window.location.href='<?= BASE_URL ?>/admin/collections'">
                                     <img src="https://cdn-icons-png.flaticon.com/512/189/189665.png" alt="Cancel" width="16" height="16" class="me-1">
                                     HỦY BỎ
                                 </button>
@@ -264,13 +265,13 @@ $formAction = $isEdit
                 brandName: 'Trang Sức',
                 activePage: 'collections',
                 links: {
-                    dashboard: 'index.php?url=dashboard',
-                    products: 'index.php?url=products',
-                    categories: 'index.php?url=categories',
-                    collections: 'index.php?url=collections',
-                    orders: 'index.php?url=orders',
-                    customers: 'index.php?url=customers',
-                    reviews: 'index.php?url=reviews'
+                    dashboard: '<?= BASE_URL ?>/admin/dashboard',
+                    products: '<?= BASE_URL ?>/admin/products',
+                    categories: '<?= BASE_URL ?>/admin/categories',
+                    collections: '<?= BASE_URL ?>/admin/collections',
+                    orders: '<?= BASE_URL ?>/admin/orders',
+                    customers: '<?= BASE_URL ?>/admin/customers',
+                    reviews: '<?= BASE_URL ?>/admin/reviews'
                 },
                 categoriesTitle: 'DANH MỤC'
             },

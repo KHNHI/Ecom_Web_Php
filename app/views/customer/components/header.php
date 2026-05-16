@@ -1,8 +1,11 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/Ecom_website/helpers/session_helper.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . BASE_URL . '/helpers/session_helper.php';
 $isLoggedIn = SessionHelper::isLoggedIn();
 $user = SessionHelper::getUser();
 ?>
+<script>
+    window.APP_BASE_URL = '<?= BASE_URL ?>';
+</script>
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg fixed-top">
@@ -155,7 +158,7 @@ document.getElementById('searchForm')?.addEventListener('submit', function(e) {
     const searchTerm = document.getElementById('searchInput').value.trim();
     if (searchTerm) {
         // Redirect to products page with search parameter
-        window.location.href = '/Ecom_website/products?search=' + encodeURIComponent(searchTerm);
+        window.location.href = '<?= BASE_URL ?>/products?search=' + encodeURIComponent(searchTerm);
     }
 });
 
@@ -164,7 +167,7 @@ document.querySelector('#searchForm button')?.addEventListener('click', function
     e.preventDefault();
     const searchTerm = document.getElementById('searchInput').value.trim();
     if (searchTerm) {
-        window.location.href = '/Ecom_website/products?search=' + encodeURIComponent(searchTerm);
+        window.location.href = '<?= BASE_URL ?>/products?search=' + encodeURIComponent(searchTerm);
     }
 });
 

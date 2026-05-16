@@ -15,7 +15,7 @@ class LoginController extends BaseController {
     public function index() {
         // Nếu đã login, redirect về dashboard
         if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in']) {
-            header('Location: /Ecom_website/admin/dashboard');
+            header('Location: ' . BASE_URL . '/admin/dashboard');
             exit;
         }
 
@@ -119,7 +119,7 @@ class LoginController extends BaseController {
             $_SESSION['admin_role'] = $user->role ?? 'admin';
 
             // Redirect
-            header('Location: /Ecom_website/admin/dashboard');
+            header('Location: ' . BASE_URL . '/admin/dashboard');
             exit;
 
         } catch (Exception $e) {
@@ -152,7 +152,7 @@ class LoginController extends BaseController {
         session_destroy();
         
         // Redirect về login page với message
-        header('Location: /Ecom_website/admin/login?logout=success');
+        header('Location: ' . BASE_URL . '/admin/login?logout=success');
         exit;
     }
 }

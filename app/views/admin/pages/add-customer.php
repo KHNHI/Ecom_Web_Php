@@ -14,12 +14,12 @@ $customer = $customer ?? null;
 
 // Nếu không có customer data, redirect về customers list
 if (!$customer) {
-    header('Location: ' . BASE_URL . '/admin/index.php?url=customers');
+    header('Location: ' . BASE_URL . '/admin/customers');
     exit;
 }
 
 // Xác định action URL - CHỈ UPDATE
-$formAction = BASE_URL . "/admin/index.php?url=customers&action=update&id={$customer->user_id}";
+$formAction = BASE_URL . "/admin/customers&action=update&id={$customer->user_id}";
 ?>
 
 <!DOCTYPE html>
@@ -37,6 +37,7 @@ $formAction = BASE_URL . "/admin/index.php?url=customers&action=update&id={$cust
     <link rel="stylesheet" href="app/views/admin/assets/css/main.css">
 </head>
 <body>
+    <script>var APP_BASE_URL = '<?= BASE_URL ?>';</script>
     <div class="admin-wrapper">
         <!-- Sidebar Component Container -->
         <div id="sidebar-container"></div>

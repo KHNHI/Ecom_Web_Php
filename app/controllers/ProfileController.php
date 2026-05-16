@@ -10,7 +10,7 @@ class ProfileController extends BaseController {
         
         // Check if user is logged in
         if (!SessionHelper::isLoggedIn()) {
-            header('Location: /Ecom_website/signin');
+            header('Location: ' . BASE_URL . '/signin');
             exit;
         }
     }
@@ -23,7 +23,7 @@ class ProfileController extends BaseController {
         $user = $this->userModel->findById($userId);
         
         if (!$user) {
-            header('Location: /Ecom_website/signin');
+            header('Location: ' . BASE_URL . '/signin');
             exit;
         }
 

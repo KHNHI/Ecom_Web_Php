@@ -36,7 +36,7 @@
                                 <img src="https://cdn-icons-png.flaticon.com/512/2920/2920277.png" alt="Error" width="64" height="64" class="mb-4 opacity-50">
                                 <h2 class="text-danger mb-3">Có lỗi xảy ra</h2>
                                 <p class="text-muted mb-4"><?= htmlspecialchars($message ?? 'Đã xảy ra lỗi không xác định') ?></p>
-                                <a href="index.php?url=dashboard" class="btn btn-primary">Quay về Dashboard</a>
+                                <a href="<?= BASE_URL ?>/admin/dashboard" class="btn btn-primary">Quay về Dashboard</a>
                             </div>
                         </div>
                     </div>

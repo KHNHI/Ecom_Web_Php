@@ -443,7 +443,7 @@
                                 <i class="fas fa-shopping-bag fa-3x text-muted mb-3"></i>
                                 <h6 class="text-muted">Bạn chưa có đơn hàng nào</h6>
                                 <p class="text-muted">Hãy bắt đầu mua sắm để xem đơn hàng tại đây</p>
-                                <a href="/Ecom_website/products" class="btn btn-primary">
+                                <a href="<?= BASE_URL ?>/products" class="btn btn-primary">
                                     <i class="fas fa-shopping-cart me-2"></i>
                                     Mua sắm ngay
                                 </a>
@@ -548,7 +548,7 @@
             const alertContainer = document.getElementById('alertContainer');
             
             try {
-                const response = await fetch('/Ecom_website/profile/update', {
+                const response = await fetch('<?= BASE_URL ?>/profile/update', {
                     method: 'POST',
                     body: formData
                 });
@@ -587,7 +587,7 @@
             }
             
             try {
-                const response = await fetch('/Ecom_website/profile/change-password', {
+                const response = await fetch('<?= BASE_URL ?>/profile/change-password', {
                     method: 'POST',
                     body: formData
                 });
@@ -614,7 +614,7 @@
             formData.append('avatar', file);
             
             try {
-                const response = await fetch('/Ecom_website/profile/upload-avatar', {
+                const response = await fetch('<?= BASE_URL ?>/profile/upload-avatar', {
                     method: 'POST',
                     body: formData
                 });
@@ -654,7 +654,7 @@
             const container = document.getElementById('wishlistContainer');
             
             try {
-                const response = await fetch('/Ecom_website/wishlist', {
+                const response = await fetch('<?= BASE_URL ?>/wishlist', {
                     method: 'GET',
                     credentials: 'same-origin',  // Include cookies/session
                     headers: {
@@ -709,7 +709,7 @@
                     items.forEach(item => {
                         const name = item.querySelector('.product-name')?.textContent?.trim() || 'Sản phẩm';
                         const price = item.querySelector('.price')?.textContent?.trim() || '0₫';
-                        const img = item.querySelector('img')?.src || '/Ecom_website/public/assets/images/placeholder.svg';
+                        const img = item.querySelector('img')?.src || '<?= BASE_URL ?>/public/assets/images/placeholder.svg';
                         const productId = item.dataset.productId || '';
                         const href = item.querySelector('a')?.href || '#';
                         
@@ -760,7 +760,7 @@
             
             try {
                 console.log('Loading wishlist via API...');
-                const response = await fetch('/Ecom_website/api/wishlist/status', {
+                const response = await fetch('<?= BASE_URL ?>/api/wishlist/status', {
                     credentials: 'same-origin',
                     headers: {
                         'Content-Type': 'application/json',
@@ -783,7 +783,7 @@
                             <i class="fas fa-heart fa-3x text-primary mb-3"></i>
                             <h6>Bạn có ${data.count} sản phẩm yêu thích</h6>
                             <p class="text-muted">Đang tải chi tiết sản phẩm...</p>
-                            <a href="/Ecom_website/wishlist" class="btn btn-primary">
+                            <a href="<?= BASE_URL ?>/wishlist" class="btn btn-primary">
                                 <i class="fas fa-eye me-2"></i>
                                 Xem danh sách đầy đủ
                             </a>
@@ -796,7 +796,7 @@
                             <i class="fas fa-heart fa-3x text-muted mb-3"></i>
                             <h6 class="text-muted">Danh sách yêu thích trống</h6>
                             <p class="text-muted">Hãy thêm những sản phẩm bạn yêu thích để xem chúng tại đây</p>
-                            <a href="/Ecom_website/products" class="btn btn-primary">
+                            <a href="<?= BASE_URL ?>/products" class="btn btn-primary">
                                 <i class="fas fa-shopping-cart me-2"></i>
                                 Khám phá sản phẩm
                             </a>
@@ -814,7 +814,7 @@
                             <i class="fas fa-redo me-2"></i>
                             Thử lại
                         </button>
-                        <a href="/Ecom_website/auth/signin" class="btn btn-outline-secondary ms-2">
+                        <a href="<?= BASE_URL ?>/auth/signin" class="btn btn-outline-secondary ms-2">
                             <i class="fas fa-sign-in-alt me-2"></i>
                             Đăng nhập lại
                         </a>
@@ -826,7 +826,7 @@
         // Remove from wishlist function
         async function removeFromWishlist(productId) {
             try {
-                const response = await fetch('/Ecom_website/wishlist/remove', {
+                const response = await fetch('<?= BASE_URL ?>/wishlist/remove', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -860,7 +860,7 @@
         // Load provinces
         async function loadProvinces() {
             try {
-                const response = await fetch('/Ecom_website/api/locations/provinces');
+                const response = await fetch('<?= BASE_URL ?>/api/locations/provinces');
                 const result = await response.json();
                 
                 if (result.success && result.data) {
@@ -917,7 +917,7 @@
         // Load wards directly by province code (modern structure)
         async function loadWardsByProvince(provinceCode) {
             try {
-                const response = await fetch(`/Ecom_website/api/locations/wards?province_code=${provinceCode}`);
+                const response = await fetch(`<?= BASE_URL ?>/api/locations/wards?province_code=${provinceCode}`);
                 const result = await response.json();
                 
                 if (result.success && result.data) {

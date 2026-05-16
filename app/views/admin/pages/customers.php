@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="app/views/admin/assets/css/main.css">
 </head>
 <body>
+    <script>var APP_BASE_URL = '<?= BASE_URL ?>';</script>
     <div class="admin-wrapper">
         <!-- Sidebar Component Container -->
         <div id="sidebar-container"></div>
@@ -259,14 +260,14 @@
                 brandName: 'JEWELLERY',
                 activePage: 'customers',
                 links: {
-                    dashboard: '<?= BASE_URL ?>' + '/admin/index.php?url=dashboard',
-                    products: '<?= BASE_URL ?>' + '/admin/index.php?url=products',
-                    categories: '<?= BASE_URL ?>' + '/admin/index.php?url=categories',
-                    orders: '<?= BASE_URL ?>' + '/admin/index.php?url=orders',
-                    customers: '<?= BASE_URL ?>' + '/admin/index.php?url=customers',
-                    collections: '<?= BASE_URL ?>' + '/admin/index.php?url=collections',
-                    reviews: '<?= BASE_URL ?>' + '/admin/index.php?url=reviews',
-                    media: '<?= BASE_URL ?>' + '/admin/index.php?url=media'
+                    dashboard: '<?= BASE_URL ?>' + '/admin/dashboard',
+                    products: '<?= BASE_URL ?>' + '/admin/products',
+                    categories: '<?= BASE_URL ?>' + '/admin/categories',
+                    orders: '<?= BASE_URL ?>' + '/admin/orders',
+                    customers: '<?= BASE_URL ?>' + '/admin/customers',
+                    collections: '<?= BASE_URL ?>' + '/admin/collections',
+                    reviews: '<?= BASE_URL ?>' + '/admin/reviews',
+                    media: '<?= BASE_URL ?>' + '/admin/media'
                 }
             },
             header: {
@@ -283,18 +284,18 @@
     <script>
         function viewCustomer(userId) {
             // Không còn dùng customer-details, chuyển sang edit
-            window.location.href = '<?= BASE_URL ?>' + '/admin/index.php?url=customers&action=edit&id=' + userId;
+            window.location.href = '<?= BASE_URL ?>' + '/admin/customers&action=edit&id=' + userId;
         }
         
         function editCustomer(userId) {
-            window.location.href = '<?= BASE_URL ?>' + '/admin/index.php?url=customers&action=edit&id=' + userId;
+            window.location.href = '<?= BASE_URL ?>' + '/admin/customers&action=edit&id=' + userId;
         }
         
         function toggleCustomerStatus(userId) {
             if (confirm('Bạn có chắc chắn muốn thay đổi trạng thái của khách hàng này không?')) {
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '<?= BASE_URL ?>' + '/admin/index.php?url=customers&action=toggle&id=' + userId;
+                form.action = '<?= BASE_URL ?>' + '/admin/customers&action=toggle&id=' + userId;
                 document.body.appendChild(form);
                 form.submit();
             }
@@ -318,7 +319,7 @@
             if (customerIdToDelete) {
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '<?= BASE_URL ?>' + '/admin/index.php?url=customers&action=delete&id=' + customerIdToDelete;
+                form.action = '<?= BASE_URL ?>' + '/admin/customers&action=delete&id=' + customerIdToDelete;
                 document.body.appendChild(form);
                 form.submit();
             }

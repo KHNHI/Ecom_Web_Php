@@ -61,6 +61,7 @@
     </style>
 </head>
 <body>
+    <script>var APP_BASE_URL = '<?= BASE_URL ?>';</script>
     <div class="admin-wrapper">
         <!-- Sidebar Component Container -->
         <div id="sidebar-container"></div>
@@ -103,7 +104,7 @@
                             </div>
                             
                             <!-- Add Product -->
-                            <button class="btn btn-success-custom btn-sm flex-shrink-0" onclick="window.location.href='index.php?url=add-product'">
+                            <button class="btn btn-success-custom btn-sm flex-shrink-0" onclick="window.location.href='<?= BASE_URL ?>/admin/add-product'">
                                 <img src="https://cdn-icons-png.flaticon.com/512/748/748113.png" alt="Add" width="16" height="16" class="me-1 d-none d-sm-inline">
                                 <span class="d-none d-sm-inline">Thêm Sản Phẩm</span>
                                 <span class="d-sm-none">
@@ -149,7 +150,7 @@
                                                             $imageSrc = htmlspecialchars($imagePath);
                                                         } else {
                                                             // Nếu là đường dẫn tương đối, thêm BASE_URL
-                                                            $imageSrc = htmlspecialchars('/Ecom_website/' . ltrim($imagePath, '/'));
+                                                            $imageSrc = htmlspecialchars(BASE_URL . '/' . ltrim($imagePath, '/'));
                                                         }
                                                     } elseif (!empty($product->main_image)) {
                                                         // Fallback: main_image column
@@ -160,7 +161,7 @@
                                                             $imageSrc = htmlspecialchars($imagePath);
                                                         } else {
                                                             // Nếu là đường dẫn tương đối, thêm BASE_URL
-                                                            $imageSrc = htmlspecialchars('/Ecom_website/' . ltrim($imagePath, '/'));
+                                                            $imageSrc = htmlspecialchars(BASE_URL . '/' . ltrim($imagePath, '/'));
                                                         }
                                                     }
                                                     ?>
@@ -236,7 +237,7 @@
                                             <div class="text-muted">
                                                 <img src="https://cdn-icons-png.flaticon.com/512/2920/2920277.png" alt="No Data" width="48" height="48" class="mb-3 opacity-50">
                                                 <p>Chưa có sản phẩm nào</p>
-                                                <button class="btn btn-primary" onclick="window.location.href='index.php?url=add-product'">
+                                                <button class="btn btn-primary" onclick="window.location.href='<?= BASE_URL ?>/admin/add-product'">
                                                     Thêm sản phẩm đầu tiên
                                                 </button>
                                             </div>
@@ -263,14 +264,14 @@
                                                 if (preg_match('/^https?:\/\//', $imagePath)) {
                                                     $imageSrc = htmlspecialchars($imagePath);
                                                 } else {
-                                                    $imageSrc = htmlspecialchars('/Ecom_website/' . ltrim($imagePath, '/'));
+                                                    $imageSrc = htmlspecialchars(BASE_URL . '/' . ltrim($imagePath, '/'));
                                                 }
                                             } elseif (!empty($product->main_image)) {
                                                 $imagePath = $product->main_image;
                                                 if (preg_match('/^https?:\/\//', $imagePath)) {
                                                     $imageSrc = htmlspecialchars($imagePath);
                                                 } else {
-                                                    $imageSrc = htmlspecialchars('/Ecom_website/' . ltrim($imagePath, '/'));
+                                                    $imageSrc = htmlspecialchars(BASE_URL . '/' . ltrim($imagePath, '/'));
                                                 }
                                             }
                                             ?>
@@ -316,7 +317,7 @@
                             <div class="text-center py-5">
                                 <img src="https://cdn-icons-png.flaticon.com/512/2920/2920277.png" alt="No Data" width="48" height="48" class="mb-3 opacity-50">
                                 <p class="text-muted">Chưa có sản phẩm nào</p>
-                                <button class="btn btn-primary" onclick="window.location.href='index.php?url=add-product'">
+                                <button class="btn btn-primary" onclick="window.location.href='<?= BASE_URL ?>/admin/add-product'">
                                     Thêm sản phẩm đầu tiên
                                 </button>
                             </div>
@@ -361,13 +362,13 @@
                 brandName: 'Trang Sức',
                 activePage: 'products',
                 links: {
-                    dashboard: 'index.php?url=dashboard',
-                    products: 'index.php?url=products',
-                    categories: 'index.php?url=categories',
-                    collections: 'index.php?url=collections',
-                    orders: 'index.php?url=orders',
-                    customers: 'index.php?url=customers',
-                    reviews: 'index.php?url=reviews'
+                    dashboard: '<?= BASE_URL ?>/admin/dashboard',
+                    products: '<?= BASE_URL ?>/admin/products',
+                    categories: '<?= BASE_URL ?>/admin/categories',
+                    collections: '<?= BASE_URL ?>/admin/collections',
+                    orders: '<?= BASE_URL ?>/admin/orders',
+                    customers: '<?= BASE_URL ?>/admin/customers',
+                    reviews: '<?= BASE_URL ?>/admin/reviews'
                 },
                 categories: <?= json_encode($categoriesData) ?>,
                 categoriesTitle: 'DANH MỤC'
@@ -380,12 +381,12 @@
 
         // Product management functions
         function viewProduct(productId) {
-            window.location.href = 'index.php?url=product-details&id=' + productId;
+            window.location.href = '<?= BASE_URL ?>/admin/product-details?id=' + productId;
         }
 
         function editProduct(productId) {
             // Mở form edit (tái sử dụng add-product.php)
-            window.location.href = 'index.php?url=edit-product&id=' + productId;
+            window.location.href = '<?= BASE_URL ?>/admin/edit-product?id=' + productId;
         }
 
         function deleteProduct(productId) {
@@ -440,7 +441,7 @@
             // Xử lý khi nhấn nút xóa
             document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
                 modal.hide();
-                window.location.href = 'index.php?url=products&action=hardDelete&id=' + productId;
+                window.location.href = '<?= BASE_URL ?>/admin/products?action=hardDelete&id=' + productId;
             });
         }
 

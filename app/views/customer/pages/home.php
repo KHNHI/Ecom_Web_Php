@@ -514,7 +514,7 @@
 
     // Helper function to convert relative paths to absolute URLs
         function getAssetUrl(path) {
-            // base path for this app (e.g. /Ecom_website or '')
+            // base path for this app (e.g. <?= BASE_URL ?> or '')
             const base = "<?= getBaseUrl() ?>" || '';
 
             // No path -> use placeholder via server-side helper (safe)
@@ -523,7 +523,7 @@
             // Absolute remote URL
             if (path.startsWith('http')) return path;
 
-            // If path already starts with app base (e.g. "/Ecom_website/...") return as-is
+            // If path already starts with app base (e.g. "<?= BASE_URL ?>/...") return as-is
             if (base && path.startsWith(base)) return path;
 
             // If path is absolute from root (starting with '/'), prefix base
@@ -557,7 +557,7 @@
         document.querySelectorAll('a[href="#signin"]').forEach(el => {
             el.addEventListener('click', function(e) {
                 e.preventDefault();
-                window.location.href = '/Ecom_website/signin';
+                window.location.href = '<?= BASE_URL ?>/signin';
             });
         });
     });
@@ -606,7 +606,7 @@
                 const searchTerm = searchInput.value;
                 if (searchTerm.trim()) {
                     // Redirect to products page with search parameter - Clean URL
-                    window.location.href = `/Ecom_website/products?search=${encodeURIComponent(searchTerm.trim())}`;
+                    window.location.href = `<?= BASE_URL ?>/products?search=${encodeURIComponent(searchTerm.trim())}`;
                 }
             });
 
@@ -635,7 +635,7 @@
         async function fetchProductData() {
             try {
                 // Fetch new arrivals - Clean URL
-                const newArrivalsResponse = await fetch('/Ecom_website/api/new-arrivals?limit=7');
+                const newArrivalsResponse = await fetch('<?= BASE_URL ?>/api/new-arrivals?limit=7');
                 const newArrivalsResult = await newArrivalsResponse.json();
                 console.log('New Arrivals API Response:', newArrivalsResult);
                 if (newArrivalsResult.success) {
@@ -655,7 +655,7 @@
                 }
 
                 // Fetch popular products - Clean URL
-                const popularResponse = await fetch('/Ecom_website/api/popular?limit=7');
+                const popularResponse = await fetch('<?= BASE_URL ?>/api/popular?limit=7');
                 const popularResult = await popularResponse.json();
                 if (popularResult.success) {
                     popularProductsData = popularResult.data.map(product => {
@@ -759,7 +759,7 @@ function renderProducts(type, direction = null) {
             items.push(`
       <div class="col-md-4 mb-4">
         <div class="card product-card">
-          <a href="/Ecom_website/product/${p.slug || p.id}" style="text-decoration: none; color: inherit;">
+          <a href="<?= BASE_URL ?>/product/${p.slug || p.id}" style="text-decoration: none; color: inherit;">
             <img src="${p.img}" class="card-img-top" alt="${p.name}">
             <div class="card-body text-center">
               <h5 class="card-title">${p.name}</h5>
@@ -811,7 +811,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Function to navigate to products page with filters
 function goToProducts(filterType, filterValue) {
-    let url = '/Ecom_website/products';
+    let url = '<?= BASE_URL ?>/products';
     let params = new URLSearchParams();
     
     if (filterType === 'category') {
@@ -833,7 +833,7 @@ async function toggleWishlist(productId, element) {
     
     try {
         // Call API first to get accurate state
-        const response = await fetch('/Ecom_website/wishlist/toggle', {
+        const response = await fetch('<?= BASE_URL ?>/wishlist/toggle', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -866,7 +866,7 @@ async function toggleWishlist(productId, element) {
             if (data.message && data.message.includes('đăng nhập')) {
                 showToast('warning', data.message);
                 setTimeout(() => {
-                    window.location.href = '/Ecom_website/signin';
+                    window.location.href = '<?= BASE_URL ?>/signin';
                 }, 2000);
             } else {
                 showToast('error', data.message || 'Có lỗi xảy ra!');
@@ -887,7 +887,7 @@ async function addToCartFromHome(productId, productName) {
         icon.className = 'bi bi-check-circle-fill';
         icon.style.color = '#28a745';
         
-        const response = await fetch('/Ecom_website/cart/add', {
+        const response = await fetch('<?= BASE_URL ?>/cart/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -943,7 +943,7 @@ function updateWishlistCount(count) {
 async function loadWishlistStatus() {
     try {
         console.log('Loading wishlist status...');
-        const response = await fetch('/Ecom_website/wishlist/status', {
+        const response = await fetch('<?= BASE_URL ?>/wishlist/status', {
             method: 'GET',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
@@ -1028,12 +1028,12 @@ function showToast(type, message) {
 // View more functions
 function viewMoreNewArrivals() {
     // Redirect to products page with new arrivals filter
-    window.location.href = '/Ecom_website/products?sort=newest&limit=10';
+    window.location.href = '<?= BASE_URL ?>/products?sort=newest&limit=10';
 }
 
 function viewMorePopular() {
     // Redirect to products page with most popular filter  
-    window.location.href = '/Ecom_website/products?sort=popular&limit=10';
+    window.location.href = '<?= BASE_URL ?>/products?sort=popular&limit=10';
 }
 
     </script>

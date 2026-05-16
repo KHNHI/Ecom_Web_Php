@@ -47,7 +47,7 @@ class OrdersController extends BaseController {
         // Chỉ chấp nhận POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $_SESSION['error'] = 'Invalid request method!';
-            $this->redirect('index.php?url=orders');
+            $this->redirect(BASE_URL . '/admin/orders');
             return;
         }
 
@@ -105,7 +105,7 @@ class OrdersController extends BaseController {
         //abc 
 
         // Redirect
-        $this->redirect('index.php?url=orders&t=' . time());
+        $this->redirect(BASE_URL . '/admin/orders?t=' . time());
     }
 
     /**
@@ -117,7 +117,7 @@ class OrdersController extends BaseController {
         // Chỉ chấp nhận POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $_SESSION['error'] = 'Invalid request method!';
-            $this->redirect('index.php?url=orders');
+            $this->redirect(BASE_URL . '/admin/orders');
             return;
         }
 
@@ -170,7 +170,7 @@ class OrdersController extends BaseController {
         }
 
         // Redirect với cache busting
-        $this->redirect('index.php?url=orders&t=' . time());
+        $this->redirect(BASE_URL . '/admin/orders?t=' . time());
     }
 
     /**
@@ -216,7 +216,7 @@ class OrdersController extends BaseController {
         } catch (Exception $e) {
             $_SESSION['error'] = $e->getMessage();
             error_log('OrdersController::showDetails Error: ' . $e->getMessage());
-            $this->redirect('index.php?url=orders');
+            $this->redirect(BASE_URL . '/admin/orders');
         }
     }
 
@@ -243,7 +243,7 @@ class OrdersController extends BaseController {
             }
         }
         
-        header('Location: ' . BASE_URL . '/admin/index.php?url=orders');
+        header('Location: ' . BASE_URL . '/admin/orders');
         exit;
     }
     
@@ -274,7 +274,7 @@ class OrdersController extends BaseController {
             error_log("✗ Delete order error: " . $e->getMessage());
         }
         
-        $this->redirect('index.php?url=orders');
+        $this->redirect(BASE_URL . '/admin/orders');
     }
 
     // =================== PRIVATE HELPER METHODS (OOP Best Practice) ===================

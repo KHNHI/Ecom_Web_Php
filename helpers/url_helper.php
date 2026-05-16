@@ -37,7 +37,10 @@ function url($path = '') {
     $path = ltrim($path, '/');
     
     // Nếu path rỗng thì chỉ trả về base, ngược lại thì nối thêm dấu /
-    return $base . ($path ? '/' . $path : '');
+    $result = $base . ($path ? '/' . $path : '');
+    
+    // Đảm bảo luôn trả về ít nhất '/' để tránh redirect URL rỗng
+    return $result === '' ? '/' : $result;
 }
 
 /**

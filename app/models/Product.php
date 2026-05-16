@@ -442,12 +442,12 @@ class Product extends BaseModel {
 //         error_log("Is Primary: " . ($isPrimary ? 'Yes' : 'No'));
         
 //         try {
-//             // Get file info
+            // Get file info
 //             $fileExtension = strtolower(pathinfo($imagePath, PATHINFO_EXTENSION));
 //             $mimeType = $this->getMimeTypeFromExtension($fileExtension);
 //             $fileName = basename($imagePath);
             
-//             // Get file size if file exists
+            // Get file size if file exists
 //             $projectRoot = dirname(__DIR__, 2);
 //             $fullPath = $projectRoot . DIRECTORY_SEPARATOR . str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $imagePath);
 //             $fileSize = (is_file($fullPath) && is_readable($fullPath)) ? filesize($fullPath) : null;
@@ -457,7 +457,7 @@ class Product extends BaseModel {
 //             error_log("File size: " . ($fileSize !== null ? $fileSize : 'UNKNOWN'));
 //             error_log("Full path: " . $fullPath);
             
-//             // 1. Insert vào images table (tự động map theo columns thực tế)
+            // 1. Insert vào images table (tự động map theo columns thực tế)
 //             $imageData = [
 //                 'file_path' => $imagePath,
 //                 'file_name' => $fileName,
@@ -470,7 +470,7 @@ class Product extends BaseModel {
 //             $filteredData = [];
 //             foreach ($imageData as $column => $value) {
 //                 if (in_array($column, $availableColumns, true)) {
-//                     // Nếu column là file_size nhưng chưa có giá trị, bỏ qua để tránh NULL không cần thiết
+                    // Nếu column là file_size nhưng chưa có giá trị, bỏ qua để tránh NULL không cần thiết
 //                     if ($column === 'file_size' && $value === null) {
 //                         continue;
 //                     }
@@ -501,12 +501,12 @@ class Product extends BaseModel {
 //             $imageId = $this->db->lastInsertId();
 //             error_log("Image inserted with ID: " . $imageId);
             
-//             // 2. Nếu set làm primary, clear primary cũ
+            // 2. Nếu set làm primary, clear primary cũ
 //             if ($isPrimary) {
 //                 $this->clearPrimaryImages($productId);
 //             }
             
-//             // 3. Insert vào image_usages table
+            // 3. Insert vào image_usages table
 //             $sql = "INSERT INTO image_usages (image_id, ref_type, ref_id, is_primary) 
 //                     VALUES (:image_id, 'product', :ref_id, :is_primary)";
             
@@ -573,10 +573,10 @@ class Product extends BaseModel {
 //         return isset($types[$extension]) ? $types[$extension] : 'image/jpeg';
 //     }
 //      public function setImagePrimary($usageId, $productId) {
-//         // 1. Clear all primary flags
+        // 1. Clear all primary flags
 //         $this->clearPrimaryImages($productId);
         
-//         // 2. Set specified image as primary
+        // 2. Set specified image as primary
 //         $sql = "UPDATE image_usages 
 //                 SET is_primary = 1 
 //                 WHERE usage_id = :usage_id 
@@ -1199,13 +1199,18 @@ class Product extends BaseModel {
      * @return int|false Image usage ID hoặc false
      */
     public function addProductImage($productId, $imagePath, $isPrimary = false) {
+        $fileExtension = strtolower(pathinfo($imagePath, PATHINFO_EXTENSION));
+        $types = ['jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png', 'gif' => 'image/gif', 'webp' => 'image/webp'];
+        $mimeType = isset($types[$fileExtension]) ? $types[$fileExtension] : 'image/jpeg';
+
         // 1. Insert vào images table
-        $sql = "INSERT INTO images (file_path, file_name, alt_text, created_at) 
-                VALUES (:path, :name, :alt, NOW())";
+        $sql = "INSERT INTO images (file_path, file_name, file_type, alt_text, created_at) 
+                VALUES (:path, :name, :type, :alt, NOW())";
         
         $this->db->query($sql);
         $this->db->bind(':path', $imagePath);
         $this->db->bind(':name', basename($imagePath));
+        $this->db->bind(':type', $mimeType);
         $this->db->bind(':alt', basename($imagePath));
         
         if (!$this->db->execute()) {

@@ -28,7 +28,7 @@ class ReviewController extends BaseController {
 
             // Kiểm tra user đăng nhập
             if (!SessionHelper::isLoggedIn()) {
-                $this->jsonResponse(false, 'Bạn cần đăng nhập để đánh giá sản phẩm', ['redirect' => '/Ecom_website/login']);
+                $this->jsonResponse(false, 'Bạn cần đăng nhập để đánh giá sản phẩm', ['redirect' => BASE_URL . '/login']);
                 return;
             }
 

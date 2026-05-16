@@ -32,7 +32,7 @@ class CheckoutController extends BaseController {
         } else {
             // Regular cart checkout - prioritize cart over buy_now_item
             if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
-                header('Location: /Ecom_website/cart');
+                header('Location: ' . BASE_URL . '/cart');
                 exit;
             }
             $cartItems = $this->getCartItems();
@@ -168,7 +168,7 @@ class CheckoutController extends BaseController {
         $orderId = $_GET['order_id'] ?? null;
         
         if (!$orderId) {
-            header('Location: /Ecom_website/');
+            header('Location: ' . BASE_URL . '/');
             exit;
         }
 

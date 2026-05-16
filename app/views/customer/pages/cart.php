@@ -285,7 +285,7 @@
                     <i class="fas fa-shopping-cart"></i>
                     <h4 class="text-muted mb-3">Giỏ hàng của bạn đang trống</h4>
                     <p class="text-muted mb-4">Hãy thêm một số sản phẩm tuyệt vời vào giỏ hàng của bạn</p>
-                    <a href="/Ecom_website/products" class="btn btn-primary">
+                    <a href="<?= BASE_URL ?>/products" class="btn btn-primary">
                         <i class="fas fa-shopping-bag me-2"></i>
                         Tiếp tục mua sắm
                     </a>
@@ -407,12 +407,12 @@
                         
                         <hr style="border-color: rgba(255,255,255,0.3);">
                         
-                        <a href="/Ecom_website/checkout" class="btn btn-gopayment mb-3">
+                        <a href="<?= BASE_URL ?>/checkout" class="btn btn-gopayment mb-3">
                             <i class="fas fa-credit-card me-2"></i>
                             Tiến hành thanh toán
                         </a>
                         
-                        <a href="/Ecom_website/products" class="btn btn-outline-light w-100">
+                        <a href="<?= BASE_URL ?>/products" class="btn btn-outline-light w-100">
                             <i class="fas fa-arrow-left me-2"></i>
                             Tiếp tục mua sắm
                         </a>
@@ -497,7 +497,7 @@
                 formData.append('size', size);
                 formData.append('color', color);
                 
-                const response = await fetch('/Ecom_website/cart/update', {
+                const response = await fetch('<?= BASE_URL ?>/cart/update', {
                     method: 'POST',
                     body: formData,
                     headers: {
@@ -555,7 +555,7 @@
                 formData.append('size', size);
                 formData.append('color', color);
                 
-                const response = await fetch('/Ecom_website/cart/remove', {
+                const response = await fetch('<?= BASE_URL ?>/cart/remove', {
                     method: 'POST',
                     body: formData,
                     headers: {
@@ -601,7 +601,7 @@
         // Clear cart
         async function clearCart() {
             try {
-                const response = await fetch('/Ecom_website/cart/clear', {
+                const response = await fetch('<?= BASE_URL ?>/cart/clear', {
                     method: 'POST',
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
@@ -626,7 +626,7 @@
         // Update cart summary
         async function updateCartSummary() {
             try {
-                const response = await fetch('/Ecom_website/cart/summary', {
+                const response = await fetch('<?= BASE_URL ?>/cart/summary', {
                     method: 'GET',
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'

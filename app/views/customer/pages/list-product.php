@@ -386,7 +386,7 @@ if (!function_exists('url')) {
                 }
                 
                 // Call API
-                const response = await fetch('/Ecom_website/wishlist/toggle', {
+                const response = await fetch('<?= BASE_URL ?>/wishlist/toggle', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -429,7 +429,7 @@ if (!function_exists('url')) {
                         showToast('warning', data.message);
                         // Optionally redirect to login page
                         setTimeout(() => {
-                            window.location.href = '/Ecom_website/signin';
+                            window.location.href = '<?= BASE_URL ?>/signin';
                         }, 2000);
                     } else {
                         showToast('error', data.message || 'Có lỗi xảy ra!');
@@ -495,7 +495,7 @@ if (!function_exists('url')) {
          */
         async function loadWishlistStatus() {
             try {
-                const response = await fetch('/Ecom_website/wishlist/status', {
+                const response = await fetch('<?= BASE_URL ?>/wishlist/status', {
                     method: 'GET',
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'

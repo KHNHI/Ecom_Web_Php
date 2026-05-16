@@ -20,16 +20,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/Ecom_website/app/views/admin/assets/css/variables.css">
-    <link rel="stylesheet" href="/Ecom_website/app/views/admin/assets/css/main.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/app/views/admin/assets/css/variables.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/app/views/admin/assets/css/main.css">
     
     <!-- Page-specific CSS -->
     <?php 
-    $currentPage = $_GET['url'] ?? 'dashboard';
+    // Detect current admin page from URL path
+    $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+    $adminBase = (defined('BASE_URL') ? BASE_URL : '') . '/admin/';
+    $currentPage = 'dashboard';
+    if (strpos($requestPath, $adminBase) !== false) {
+        $afterAdmin = substr($requestPath, strpos($requestPath, $adminBase) + strlen($adminBase));
+        $currentPage = explode('/', trim($afterAdmin, '/'))[0] ?: 'dashboard';
+    } elseif (isset($_GET['url'])) {
+        $currentPage = $_GET['url'];
+    }
     $cssFile = __DIR__ . "/../assets/css/{$currentPage}.css";
     if (file_exists($cssFile)): 
     ?>
-        <link rel="stylesheet" href="/Ecom_website/app/views/admin/assets/css/<?= $currentPage ?>.css">
+        <link rel="stylesheet" href="<?= BASE_URL ?>/app/views/admin/assets/css/<?= $currentPage ?>.css">
     <?php endif; ?>
 </head>
 <body>
@@ -51,9 +60,10 @@
 
     <!-- Page Configuration -->
     <script>
+        window.APP_BASE_URL = '<?= BASE_URL ?>';
         // Set active page for sidebar
         document.addEventListener('DOMContentLoaded', function() {
-            const currentPage = '<?= $_GET['url'] ?? 'dashboard' ?>';
+            const currentPage = '<?= $currentPage ?>';
             const sidebarLinks = document.querySelectorAll('.sidebar-nav-link');
             
             sidebarLinks.forEach(link => {
@@ -68,15 +78,14 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Main JS -->
-    <script src="app/views/admin/assets/js/main.js"></script>
+    <script src="<?= BASE_URL ?>/app/views/admin/assets/js/main.js"></script>
     
     <!-- Page-specific JS -->
     <?php 
-    $currentPage = $_GET['url'] ?? 'dashboard';
-    $jsFile = "app/views/admin/assets/js/{$currentPage}.js";
+    $jsFile = __DIR__ . "/../assets/js/{$currentPage}.js";
     if (file_exists($jsFile)): 
     ?>
-        <script src="<?= $jsFile ?>"></script>
+        <script src="<?= BASE_URL ?>/app/views/admin/assets/js/<?= $currentPage ?>.js"></script>
     <?php endif; ?>
 </body>
 </html>

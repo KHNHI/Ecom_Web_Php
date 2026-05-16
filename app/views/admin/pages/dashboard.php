@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="app/views/admin/assets/css/main.css">
 </head>
 <body>
+    <script>var APP_BASE_URL = '<?= BASE_URL ?>';</script>
     <div class="admin-wrapper">
         <!-- Sidebar Component Container -->
         <div id="sidebar-container"></div>
@@ -210,13 +211,13 @@
                 brandName: 'Trang Sức',
                 activePage: 'dashboard',
                 links: {
-                    dashboard: 'index.php?url=dashboard',
-                    products: 'index.php?url=products',
-                    categories: 'index.php?url=categories',
-                    collections: 'index.php?url=collections',
-                    orders: 'index.php?url=orders',
-                    customers: 'index.php?url=customers',
-                    reviews: 'index.php?url=reviews'
+                    dashboard: '<?= BASE_URL ?>/admin/dashboard',
+                    products: '<?= BASE_URL ?>/admin/products',
+                    categories: '<?= BASE_URL ?>/admin/categories',
+                    collections: '<?= BASE_URL ?>/admin/collections',
+                    orders: '<?= BASE_URL ?>/admin/orders',
+                    customers: '<?= BASE_URL ?>/admin/customers',
+                    reviews: '<?= BASE_URL ?>/admin/reviews'
                 },
                 categories: [],
                 categoriesTitle: 'DANH MỤC'

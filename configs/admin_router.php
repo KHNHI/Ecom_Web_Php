@@ -277,6 +277,23 @@ class AdminRouter {
             $url = explode('/', $url);
             return $url;
         }
+
+        // Fallback for PHP Built-in Server or missing .htaccess
+        $requestUri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+        
+        // Remove BASE_URL/admin prefix
+        $baseUrl = defined('BASE_URL') ? rtrim(BASE_URL, '/') : '';
+        $adminPrefix = $baseUrl . '/admin';
+        if (strpos($requestUri, $adminPrefix) === 0) {
+            $requestUri = substr($requestUri, strlen($adminPrefix));
+        }
+
+        $url = trim($requestUri, '/');
+        if (!empty($url)) {
+            $url = filter_var($url, FILTER_SANITIZE_URL);
+            return explode('/', $url);
+        }
+
         return [];
     }
 }

@@ -193,6 +193,7 @@ $formAction = $isEdit
                                                                 </button>
                                                             </div>
                                                             <div class="row">
+                                                                <input type="hidden" name="variants[<?= $index ?>][variant_id]" value="<?= isset($variant->variant_id) ? $variant->variant_id : '' ?>">
                                                                 <div class="col-md-3">
                                                                     <div class="form-group mb-3">
                                                                         <label class="form-label">Size <span class="text-danger">*</span></label>
@@ -539,7 +540,7 @@ $formAction = $isEdit
                 return;
             }
 
-            fetch(`index.php?url=products&action=deleteImage&image_id=${imageId}&product_id=${productId}`, {
+            fetch(`${APP_BASE_URL}/admin/products?action=deleteImage&image_id=${imageId}&product_id=${productId}`, {
                 method: 'POST'
             })
             .then(response => response.json())

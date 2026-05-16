@@ -148,10 +148,10 @@ $order_id = $data['order_id'] ?? '';
 
                 <!-- Action Buttons -->
                 <div class="text-center">
-                    <a href="/Ecom_website/" class="btn btn-primary btn-lg me-3">
+                    <a href="<?= BASE_URL ?>/" class="btn btn-primary btn-lg me-3">
                         <i class="fas fa-home me-2"></i>Về trang chủ
                     </a>
-                    <a href="/Ecom_website/products" class="btn btn-outline-primary btn-lg">
+                    <a href="<?= BASE_URL ?>/products" class="btn btn-outline-primary btn-lg">
                         <i class="fas fa-shopping-bag me-2"></i>Tiếp tục mua sắm
                     </a>
                 </div>

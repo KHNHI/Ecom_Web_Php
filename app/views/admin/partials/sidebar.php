@@ -5,4 +5,4 @@
  */
 // echo ROOT; exit;
 ?>
-<?php include ROOT . 'components/sidebar.html'; ?>
+<?php include ROOT . 'components/sidebar.php'; ?>

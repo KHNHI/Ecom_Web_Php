@@ -11,10 +11,10 @@ ob_start();
                 <h2 class="mb-3">Page Not Found</h2>
                 <p class="lead mb-4"><?= htmlspecialchars($message ?? 'The page you are looking for might have been removed or is temporarily unavailable.') ?></p>
                 <div class="action-buttons">
-                    <a href="/Ecom_website" class="btn btn-gold me-3">
+                    <a href="<?= BASE_URL ?>" class="btn btn-gold me-3">
                         <i class="fas fa-home"></i> Go Home
                     </a>
-                    <a href="/Ecom_website/products" class="btn btn-outline-gold">
+                    <a href="<?= BASE_URL ?>/products" class="btn btn-outline-gold">
                         <i class="fas fa-shopping-bag"></i> Browse Products
                     </a>
                 </div>

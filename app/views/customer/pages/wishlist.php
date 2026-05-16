@@ -203,10 +203,10 @@ $wishlist = $data['wishlist'] ?? null;
                 <div id="wishlistItemsContainer" style="display: none;">
                 <?php foreach ($wishlistItems as $item): ?>
                     <div class="wishlist-item" data-product-id="<?= $item->product_id ?>">
-                        <img src="<?= $item->primary_image ?? '/Ecom_website/public/assets/images/placeholder.jpg' ?>" alt="<?= htmlspecialchars($item->product_name) ?>">
+                        <img src="<?= $item->primary_image ?? BASE_URL . '/public/assets/images/placeholder.jpg' ?>" alt="<?= htmlspecialchars($item->product_name) ?>">
                         <span class="product-name"><?= htmlspecialchars($item->product_name) ?></span>
                         <span class="price"><?= number_format($item->base_price, 0, ',', '.') ?>₫</span>
-                        <a href="/Ecom_website/product/<?= $item->slug ?? $item->product_id ?>"></a>
+                        <a href="<?= BASE_URL ?>/product/<?= $item->slug ?? $item->product_id ?>"></a>
                     </div>
                 <?php endforeach; ?>
                 </div>
@@ -218,15 +218,15 @@ $wishlist = $data['wishlist'] ?? null;
                                 <i class="fas fa-times"></i>
                             </button>
                             
-                            <a href="/Ecom_website/product/<?= $item->slug ?? $item->product_id ?>">
-                                <img src="<?= $item->primary_image ?? '/Ecom_website/public/assets/images/placeholder.jpg' ?>" 
+                            <a href="<?= BASE_URL ?>/product/<?= $item->slug ?? $item->product_id ?>">
+                                <img src="<?= $item->primary_image ?? BASE_URL . '/public/assets/images/placeholder.jpg' ?>" 
                                      alt="<?= htmlspecialchars($item->product_name) ?>" 
                                      class="product-image">
                             </a>
                             
                             <div class="product-info">
                                 <h5 class="product-title">
-                                    <a href="/Ecom_website/product/<?= $item->slug ?? $item->product_id ?>" class="text-decoration-none">
+                                    <a href="<?= BASE_URL ?>/product/<?= $item->slug ?? $item->product_id ?>" class="text-decoration-none">
                                         <?= htmlspecialchars($item->product_name) ?>
                                     </a>
                                 </h5>
@@ -240,7 +240,7 @@ $wishlist = $data['wishlist'] ?? null;
                                         <i class="fas fa-shopping-cart me-2"></i>
                                         Thêm vào giỏ
                                     </button>
-                                    <a href="/Ecom_website/product/<?= $item->slug ?? $item->product_id ?>" class="btn btn-outline-secondary">
+                                    <a href="<?= BASE_URL ?>/product/<?= $item->slug ?? $item->product_id ?>" class="btn btn-outline-secondary">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                 </div>
@@ -255,7 +255,7 @@ $wishlist = $data['wishlist'] ?? null;
                 <i class="fas fa-heart-broken"></i>
                 <h3>Danh sách yêu thích trống</h3>
                 <p class="text-muted">Bạn chưa thêm sản phẩm nào vào danh sách yêu thích.<br>Hãy khám phá các sản phẩm tuyệt vời của chúng tôi!</p>
-                <a href="/Ecom_website/products" class="btn-continue">
+                <a href="<?= BASE_URL ?>/products" class="btn-continue">
                     <i class="fas fa-shopping-bag me-2"></i>
                     Tiếp tục mua sắm
                 </a>
@@ -285,7 +285,7 @@ $wishlist = $data['wishlist'] ?? null;
                 
                 if (!result.isConfirmed) return;
                 
-                const response = await fetch('/Ecom_website/wishlist/remove', {
+                const response = await fetch(BASE_URL . '/wishlist/remove', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -358,7 +358,7 @@ $wishlist = $data['wishlist'] ?? null;
                 
                 if (!result.isConfirmed) return;
                 
-                const response = await fetch('/Ecom_website/wishlist/clear', {
+                const response = await fetch(BASE_URL . '/wishlist/clear', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -398,7 +398,7 @@ $wishlist = $data['wishlist'] ?? null;
         // Add to cart
         async function addToCart(productId) {
             try {
-                const response = await fetch('/Ecom_website/cart/add', {
+                const response = await fetch(BASE_URL . '/cart/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',

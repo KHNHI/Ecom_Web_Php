@@ -101,7 +101,7 @@ class CustomersController extends BaseController {
 
         } catch (Exception $e) {
             $_SESSION['error'] = $e->getMessage();
-            header('Location: ' . BASE_URL . '/admin/index.php?url=customers');
+            header('Location: ' . BASE_URL . '/admin/customers');
             exit;
         }
     }
@@ -112,7 +112,7 @@ class CustomersController extends BaseController {
     public function update() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $_SESSION['error'] = 'Invalid request method!';
-            header('Location: ' . BASE_URL . '/admin/index.php?url=customers');
+            header('Location: ' . BASE_URL . '/admin/customers');
             exit;
         }
 
@@ -166,7 +166,7 @@ class CustomersController extends BaseController {
             $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
         }
         
-        header('Location: ' . BASE_URL . '/admin/index.php?url=customers');
+        header('Location: ' . BASE_URL . '/admin/customers');
         exit;
     }
 
@@ -190,7 +190,7 @@ class CustomersController extends BaseController {
             $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
         }
         
-        header('Location: ' . BASE_URL . '/admin/index.php?url=customers');
+        header('Location: ' . BASE_URL . '/admin/customers');
         exit;
     }
 
@@ -214,7 +214,7 @@ class CustomersController extends BaseController {
             $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
         }
         
-        header('Location: ' . BASE_URL . '/admin/index.php?url=customers');
+        header('Location: ' . BASE_URL . '/admin/customers');
         exit;
     }
 

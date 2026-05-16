@@ -7,8 +7,16 @@ const _PASSWORD = '';
 const _DRIVER = 'mysql';
 
 // Base URL configuration
-// For localhost/Ecom_website
-define('BASE_URL', '/Ecom_website');
+// Dynamic Base URL configuration - supports cloning into any folder
+$scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
+
+// If we're running from admin/index.php, strip the /admin part
+// so BASE_URL represents the project root, not the admin subdirectory
+if (preg_match('#/admin$#', $scriptDir)) {
+    $scriptDir = substr($scriptDir, 0, -6); // Remove trailing '/admin'
+}
+
+define('BASE_URL', rtrim($scriptDir === '/' ? '' : $scriptDir, '/'));
 define('FULL_BASE_URL', 'http://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . BASE_URL);
 
 // Define root paths

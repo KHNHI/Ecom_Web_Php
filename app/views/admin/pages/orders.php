@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="app/views/admin/assets/css/main.css">
 </head>
 <body>
+    <script>var APP_BASE_URL = '<?= BASE_URL ?>';</script>
     <div class="admin-wrapper">
         <!-- Sidebar Component Container -->
         <div id="sidebar-container"></div>
@@ -58,7 +59,7 @@
                     <?php foreach ($orders as $order): ?>
                         <tr>
                             <td>
-                                <a href="index.php?url=order-details&id=<?= $order->order_id ?>" class="text-decoration-none fw-bold text-primary text-nowrap">
+                                <a href="<?= BASE_URL ?>/admin/order-details?id=<?= $order->order_id ?>" class="text-decoration-none fw-bold text-primary text-nowrap">
                                     #<?= $order->order_id ?? $order->order_id ?>
                                 </a>
                                 <!-- Mobile info -->
@@ -212,13 +213,13 @@
                 brandName: 'Trang Sức',
                 activePage: 'orders',
                 links: {
-                    dashboard: 'index.php?url=dashboard',
-                    products: 'index.php?url=products',
-                    categories: 'index.php?url=categories',
-                    collections: 'index.php?url=collections',
-                    orders: 'index.php?url=orders',
-                    customers: 'index.php?url=customers',
-                    reviews: 'index.php?url=reviews'
+                    dashboard: '<?= BASE_URL ?>/admin/dashboard',
+                    products: '<?= BASE_URL ?>/admin/products',
+                    categories: '<?= BASE_URL ?>/admin/categories',
+                    collections: '<?= BASE_URL ?>/admin/collections',
+                    orders: '<?= BASE_URL ?>/admin/orders',
+                    customers: '<?= BASE_URL ?>/admin/customers',
+                    reviews: '<?= BASE_URL ?>/admin/reviews'
                 },
                 categories: [],
                 categoriesTitle: 'DANH MỤC'
@@ -235,7 +236,7 @@
         // Chỉnh sửa đơn hàng
         function editOrder(orderId) {
             // Redirect đến trang chi tiết đơn hàng để chỉnh sửa
-            window.location.href = '<?= BASE_URL ?>/admin/index.php?url=order-details&id=' + orderId;
+            window.location.href = '<?= BASE_URL ?>/admin/order-details&id=' + orderId;
         }
 
         // Xóa đơn hàng
@@ -259,7 +260,7 @@
             // Gửi request xóa
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = '<?= BASE_URL ?>/admin/index.php?url=orders&action=delete&id=' + orderId;
+            form.action = '<?= BASE_URL ?>/admin/orders&action=delete&id=' + orderId;
             document.body.appendChild(form);
             form.submit();
         }
@@ -280,7 +281,7 @@
             if (confirm(`Bạn có chắc muốn đổi trạng thái thành "${statusTexts[status]}"?`)) {
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = 'index.php?url=orders&action=updatePayment&id=' + orderId;
+                form.action = '<?= BASE_URL ?>/admin/orders?action=updatePayment&id=' + orderId;
                 
                 const input = document.createElement('input');
                 input.type = 'hidden';
@@ -315,7 +316,7 @@
             if (confirm(`Bạn có chắc muốn đổi trạng thái thành "${statusTexts[status]}"?`)) {
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '<?= BASE_URL ?>/admin/index.php?url=orders&action=updateStatus&id=' + orderId;
+                form.action = '<?= BASE_URL ?>/admin/orders&action=updateStatus&id=' + orderId;
                 
                 const input = document.createElement('input');
                 input.type = 'hidden';

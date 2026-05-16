@@ -219,6 +219,22 @@ class Route {
             $url = explode('/', $url);
             return $url;
         }
+
+        // Fallback for PHP Built-in Server or missing .htaccess
+        $requestUri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+        
+        // Remove BASE_URL prefix
+        $baseUrl = defined('BASE_URL') ? BASE_URL : '';
+        if ($baseUrl && strpos($requestUri, $baseUrl) === 0) {
+            $requestUri = substr($requestUri, strlen($baseUrl));
+        }
+
+        $url = trim($requestUri, '/');
+        if (!empty($url)) {
+            $url = filter_var($url, FILTER_SANITIZE_URL);
+            return explode('/', $url);
+        }
+
         return [];
     }
 }

@@ -1,0 +1,37 @@
+<!-- Header Component -->
+<header class="header">
+    <div class="header-content">
+        <div class="d-flex align-items-center gap-3">
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" type="button" aria-label="Toggle menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            
+            <div>
+                <h1 class="header-title" data-page-title="Dashboard">QUẢN TRỊ VIÊN</h1>
+    
+            </div>
+        </div>
+        <div class="header-actions">
+            <!-- Additional Action Buttons Container -->
+            <div id="additional-actions"></div>
+            
+            <!-- Logout Button -->
+            <button class="btn btn-logout" onclick="handleLogout()" title="Đăng xuất">
+                <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+            </button>
+            
+            <script>
+            function handleLogout() {
+                if (confirm('Bạn có chắc muốn đăng xuất?')) {
+                    window.location.href = '<?= BASE_URL ?>/admin/logout';
+                }
+            }
+            </script>
+        </div>
+    </div>
+</header>

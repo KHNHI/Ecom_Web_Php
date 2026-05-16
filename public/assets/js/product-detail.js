@@ -132,7 +132,8 @@ document.addEventListener("DOMContentLoaded", function () {
     searchBtn.addEventListener("click", function () {
       const searchTerm = document.querySelector(".search-input").value;
       if (searchTerm.trim()) {
-        window.location.href = `/Ecom_website/customer/products?search=${encodeURIComponent(
+        const baseUrl = window.APP_BASE_URL !== undefined ? window.APP_BASE_URL : '';
+        window.location.href = `${baseUrl}/products?search=${encodeURIComponent(
           searchTerm.trim()
         )}`;
       }

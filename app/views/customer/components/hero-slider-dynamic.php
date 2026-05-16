@@ -75,7 +75,7 @@ Hero Slider Section với dữ liệu động từ database
                         <div class="hero-content text-center">
                             <h1 class="hero-title">Chào mừng đến với Jewelry Store</h1>
                             <p class="hero-description">Khám phá bộ sưu tập trang sức cao cấp</p>
-                            <a href="/Ecom_website/products" class="btn btn-primary btn-lg">Xem Sản Phẩm</a>
+                            <a href="<?= BASE_URL ?>/products" class="btn btn-primary btn-lg">Xem Sản Phẩm</a>
                         </div>
                     </div>
                 </div>

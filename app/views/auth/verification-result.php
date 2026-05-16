@@ -222,10 +222,10 @@
                 <h1 class="verification-title text-success">Xác thực thành công!</h1>
                 <p class="verification-message"><?php echo htmlspecialchars($message); ?></p>
                 <div class="mt-4">
-                    <a href="/Ecom_website/signin" class="btn btn-primary">
+                    <a href="<?= BASE_URL ?>/signin" class="btn btn-primary">
                         <i class="fas fa-sign-in-alt me-2"></i>Đăng nhập ngay
                     </a>
-                    <a href="/Ecom_website/" class="btn btn-outline-primary">
+                    <a href="<?= BASE_URL ?>/" class="btn btn-outline-primary">
                         <i class="fas fa-home me-2"></i>Về trang chủ
                     </a>
                 </div>
@@ -236,10 +236,10 @@
                 <h1 class="verification-title text-danger">Xác thực thất bại</h1>
                 <p class="verification-message"><?php echo htmlspecialchars($message ?? 'Có lỗi xảy ra trong quá trình xác thực email.'); ?></p>
                 <div class="mt-4">
-                    <a href="/Ecom_website/signup" class="btn btn-primary">
+                    <a href="<?= BASE_URL ?>/signup" class="btn btn-primary">
                         <i class="fas fa-user-plus me-2"></i>Đăng ký lại
                     </a>
-                    <a href="/Ecom_website/" class="btn btn-outline-primary">
+                    <a href="<?= BASE_URL ?>/" class="btn btn-outline-primary">
                         <i class="fas fa-home me-2"></i>Về trang chủ
                     </a>
                 </div>

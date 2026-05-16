@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="app/views/admin/assets/css/main.css">
 </head>
 <body>
+    <script>var APP_BASE_URL = '<?= BASE_URL ?>';</script>
     <div class="admin-wrapper">
         <!-- Sidebar Component Container -->
         <div id="sidebar-container"></div>
@@ -116,7 +117,7 @@
                             </div>
                             
                             <!-- Add Collection -->
-                            <button class="btn btn-success-custom btn-sm flex-shrink-0" onclick="window.location.href='index.php?url=add-collection'">
+                            <button class="btn btn-success-custom btn-sm flex-shrink-0" onclick="window.location.href='<?= BASE_URL ?>/admin/add-collection'">
                                 <img src="https://cdn-icons-png.flaticon.com/512/748/748113.png" alt="Add" width="16" height="16" class="me-1 d-none d-sm-inline">
                                 <span class="d-none d-sm-inline">Thêm BST</span>
                                 <span class="d-sm-none">
@@ -228,14 +229,14 @@
                 brandName: 'Trang Sức',
                 activePage: 'collections',
                 links: {
-                    dashboard: '/admin/index.php?url=dashboard',
-                    products: '/admin/index.php?url=products',
-                    categories: '/admin/index.php?url=categories',
-                    orders: '/admin/index.php?url=orders',
-                    customers: '/admin/index.php?url=customers',
-                    collections: '/admin/index.php?url=collections',
-                    reviews: '/admin/index.php?url=reviews',
-                    media: '/admin/index.php?url=media'
+                    dashboard: '/admin/dashboard',
+                    products: '/admin/products',
+                    categories: '/admin/categories',
+                    orders: '/admin/orders',
+                    customers: '/admin/customers',
+                    collections: '/admin/collections',
+                    reviews: '/admin/reviews',
+                    media: '/admin/media'
                 }
             }
         };
@@ -248,22 +249,22 @@
     <script>
         function viewCollection(collectionId) {
             // Không còn dùng collection-details, chuyển sang edit
-            window.location.href = 'index.php?url=edit-collection&id=' + collectionId;
+            window.location.href = '<?= BASE_URL ?>/admin/edit-collection?id=' + collectionId;
         }
         
         function editCollection(collectionId) {
-            window.location.href = 'index.php?url=edit-collection&id=' + collectionId;
+            window.location.href = '<?= BASE_URL ?>/admin/edit-collection?id=' + collectionId;
         }
         
         function viewProducts(collectionId) {
-            window.location.href = 'index.php?url=products&collection=' + collectionId;
+            window.location.href = '<?= BASE_URL ?>/admin/products?collection=' + collectionId;
         }
         
         function toggleCollection(collectionId) {
             if (confirm('Bạn có chắc chắn muốn thay đổi trạng thái của bộ sưu tập này?')) {
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = 'index.php?url=collections&action=toggle&id=' + collectionId;
+                form.action = '<?= BASE_URL ?>/admin/collections?action=toggle&id=' + collectionId;
                 document.body.appendChild(form);
                 form.submit();
             }

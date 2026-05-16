@@ -66,7 +66,7 @@ class CategoriesController extends BaseController {
 
         } catch (Exception $e) {
             $_SESSION['error'] = 'Có lỗi xảy ra: ' . $e->getMessage();
-            $this->redirect('index.php?url=categories');
+            $this->redirect(BASE_URL . '/admin/categories');
         }
     }
 
@@ -78,7 +78,7 @@ class CategoriesController extends BaseController {
         // Chỉ chấp nhận POST request
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $_SESSION['error'] = 'Invalid request method!';
-            $this->redirect('index.php?url=categories');
+            $this->redirect(BASE_URL . '/admin/categories');
             return;
         }
 
@@ -89,7 +89,7 @@ class CategoriesController extends BaseController {
             if (!empty($validationErrors)) {
                 $_SESSION['error'] = implode('<br>', $validationErrors);
                 $_SESSION['old_input'] = $_POST;
-                $this->redirect('index.php?url=add-category');
+                $this->redirect(BASE_URL . '/admin/add-category');
                 return;
             }
 
@@ -103,13 +103,13 @@ class CategoriesController extends BaseController {
             $_SESSION['success'] = 'Tạo danh mục thành công!';
             error_log("Category created successfully with ID: $categoryId");
             
-            $this->redirect('index.php?url=categories');
+            $this->redirect(BASE_URL . '/admin/categories');
             
         } catch (Exception $e) {
             $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
             $_SESSION['old_input'] = $_POST;
             error_log('CategoriesController::create Error: ' . $e->getMessage());
-            $this->redirect('index.php?url=add-category');
+            $this->redirect(BASE_URL . '/admin/add-category');
         }
     }
 
@@ -144,7 +144,7 @@ class CategoriesController extends BaseController {
 
         } catch (Exception $e) {
             $_SESSION['error'] = $e->getMessage();
-            $this->redirect('index.php?url=categories');
+            $this->redirect(BASE_URL . '/admin/categories');
         }
     }
 
@@ -156,7 +156,7 @@ class CategoriesController extends BaseController {
         // Chỉ chấp nhận POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $_SESSION['error'] = 'Invalid request method!';
-            $this->redirect('index.php?url=categories');
+            $this->redirect(BASE_URL . '/admin/categories');
             return;
         }
 
@@ -172,7 +172,7 @@ class CategoriesController extends BaseController {
             
             if (!empty($validationErrors)) {
                 $_SESSION['error'] = implode('<br>', $validationErrors);
-                $this->redirect('index.php?url=edit-category&id=' . $categoryId);
+                $this->redirect(BASE_URL . '/admin/edit-category?id=' . $categoryId);
                 return;
             }
 
@@ -188,7 +188,7 @@ class CategoriesController extends BaseController {
             error_log('CategoriesController::update Error: ' . $e->getMessage());
         }
         
-        $this->redirect('index.php?url=categories');
+        $this->redirect(BASE_URL . '/admin/categories');
     }
 
     /**
@@ -213,7 +213,7 @@ class CategoriesController extends BaseController {
             error_log('CategoriesController::delete Error: ' . $e->getMessage());
         }
         
-        $this->redirect('index.php?url=categories');
+        $this->redirect(BASE_URL . '/admin/categories');
     }
 
     // =================== PRIVATE HELPER METHODS (OOP Best Practice) ===================

@@ -308,7 +308,7 @@
                             <p class="auth-subtitle">Khám phá bộ sưu tập trang sức cao cấp của chúng tôi</p>
                             <div class="mt-4">
                                 <p class="mb-2">Chưa có tài khoản?</p>
-                                <a href="/Ecom_website/signup" class="btn btn-outline-light">
+                                <a href="<?= BASE_URL ?>/signup" class="btn btn-outline-light">
                                     <i class="fas fa-user-plus me-2"></i>Đăng ký ngay
                                 </a>
                             </div>
@@ -371,7 +371,7 @@
                         <!-- Mobile signup prompt - only shows on small screens -->
                         <div class="signup-prompt-mobile">
                             <p class="mb-2">Chưa có tài khoản?</p>
-                            <a href="/Ecom_website/signup" class="btn btn-outline-gold">
+                            <a href="<?= BASE_URL ?>/signup" class="btn btn-outline-gold">
                                 <i class="fas fa-user-plus me-2"></i>Đăng ký ngay
                             </a>
                         </div>

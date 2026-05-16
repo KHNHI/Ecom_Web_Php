@@ -20,7 +20,7 @@ class ProductsController extends BaseController {
         $this->collectionModel = $this->model('Collection');
                 
         // Set absolute upload path
-        $this->uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Ecom_website/public/uploads/products/';
+        $this->uploadPath = $_SERVER['DOCUMENT_ROOT'] . BASE_URL . '/public/uploads/products/';
     }
 
     /**
@@ -90,7 +90,7 @@ class ProductsController extends BaseController {
 
         } catch (Exception $e) {
             $_SESSION['error'] = 'Có lỗi xảy ra: ' . $e->getMessage();
-            $this->redirect('index.php?url=products');
+            $this->redirect(BASE_URL . '/admin/products');
         }
     }
 
@@ -102,7 +102,7 @@ class ProductsController extends BaseController {
         // Chỉ chấp nhận POST request
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $_SESSION['error'] = 'Invalid request method!';
-            $this->redirect('index.php?url=products');
+            $this->redirect(BASE_URL . '/admin/products');
             return;
         }
 
@@ -119,7 +119,7 @@ class ProductsController extends BaseController {
             if (!empty($validationErrors)) {
                 $_SESSION['error'] = implode('<br>', $validationErrors);
                 $_SESSION['old_input'] = $_POST; // Giữ lại dữ liệu cũ
-                $this->redirect('index.php?url=add-product');
+                $this->redirect(BASE_URL . '/admin/add-product');
                 return;
             }
 
@@ -187,12 +187,12 @@ class ProductsController extends BaseController {
             }
 
             $_SESSION['success'] = 'Tạo sản phẩm thành công!';
-            $this->redirect('index.php?url=products');
+            $this->redirect(BASE_URL . '/admin/products');
             
         } catch (Exception $e) {
             $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
             $_SESSION['old_input'] = $_POST;
-            $this->redirect('index.php?url=add-product');
+            $this->redirect(BASE_URL . '/admin/add-product');
         }
     }
 
@@ -204,7 +204,7 @@ class ProductsController extends BaseController {
         // Chỉ chấp nhận POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $_SESSION['error'] = 'Invalid request method!';
-            $this->redirect('index.php?url=products');
+            $this->redirect(BASE_URL . '/admin/products');
             return;
         }
 
@@ -220,7 +220,7 @@ class ProductsController extends BaseController {
             
             if (!empty($validationErrors)) {
                 $_SESSION['error'] = implode('<br>', $validationErrors);
-                $this->redirect('index.php?url=edit-product&id=' . $productId);
+                $this->redirect(BASE_URL . '/admin/edit-product?id=' . $productId);
                 return;
             }
 
@@ -241,26 +241,65 @@ class ProductsController extends BaseController {
 
             // Update product trong database
             if ($this->productModel->update($productId, $data)) {
-                // Xử lý variants (XÓA CŨ + THÊM MỚI)
+                // Xử lý variants (Cập nhật thông minh)
                 if (isset($_POST['variants']) && is_array($_POST['variants'])) {
-                    // Xóa tất cả variants cũ
                     $db = Database::getInstance();
-                    $db->query("DELETE FROM product_variants WHERE product_id = :product_id");
-                    $db->bind(':product_id', $productId);
-                    $db->execute();
+                    $submittedVariantIds = [];
                     
-                    // Thêm variants mới
+                    // Lấy tất cả variant hiện tại của product
+                    $db->query("SELECT variant_id FROM product_variants WHERE product_id = :product_id");
+                    $db->bind(':product_id', $productId);
+                    $existingVariants = $db->resultSet();
+                    $existingIds = [];
+                    if ($existingVariants) {
+                        foreach ($existingVariants as $v) {
+                            $existingIds[] = $v->variant_id;
+                        }
+                    }
+
                     foreach ($_POST['variants'] as $variant) {
                         if (!empty($variant['size']) && !empty($variant['color']) && 
                             isset($variant['price']) && isset($variant['stock'])) {
-                            $db->query("INSERT INTO product_variants (product_id, size, color, price, stock) 
-                                       VALUES (:product_id, :size, :color, :price, :stock)");
-                            $db->bind(':product_id', $productId);
-                            $db->bind(':size', trim($variant['size']));
-                            $db->bind(':color', trim($variant['color']));
-                            $db->bind(':price', floatval($variant['price']));
-                            $db->bind(':stock', intval($variant['stock']));
-                            $db->execute();
+                            
+                            if (!empty($variant['variant_id'])) {
+                                // Cập nhật variant cũ
+                                $db->query("UPDATE product_variants SET size = :size, color = :color, price = :price, stock = :stock WHERE variant_id = :variant_id AND product_id = :product_id");
+                                $db->bind(':variant_id', $variant['variant_id']);
+                                $db->bind(':product_id', $productId);
+                                $db->bind(':size', trim($variant['size']));
+                                $db->bind(':color', trim($variant['color']));
+                                $db->bind(':price', floatval($variant['price']));
+                                $db->bind(':stock', intval($variant['stock']));
+                                $db->execute();
+                                $submittedVariantIds[] = $variant['variant_id'];
+                            } else {
+                                // Thêm variant mới
+                                $db->query("INSERT INTO product_variants (product_id, size, color, price, stock) VALUES (:product_id, :size, :color, :price, :stock)");
+                                $db->bind(':product_id', $productId);
+                                $db->bind(':size', trim($variant['size']));
+                                $db->bind(':color', trim($variant['color']));
+                                $db->bind(':price', floatval($variant['price']));
+                                $db->bind(':stock', intval($variant['stock']));
+                                $db->execute();
+                            }
+                        }
+                    }
+
+                    // Xóa các variant bị loại bỏ khỏi form
+                    foreach ($existingIds as $eId) {
+                        if (!in_array($eId, $submittedVariantIds)) {
+                            try {
+                                $db->query("DELETE FROM product_variants WHERE variant_id = :variant_id AND product_id = :product_id");
+                                $db->bind(':variant_id', $eId);
+                                $db->bind(':product_id', $productId);
+                                $db->execute();
+                            } catch (Exception $e) {
+                                error_log("Failed to delete variant_id $eId (likely FK constraint): " . $e->getMessage());
+                                // Soft delete fallback: Set stock = 0
+                                $db->query("UPDATE product_variants SET stock = 0 WHERE variant_id = :variant_id");
+                                $db->bind(':variant_id', $eId);
+                                $db->execute();
+                            }
                         }
                     }
                 }
@@ -296,7 +335,7 @@ class ProductsController extends BaseController {
             error_log('ProductsController::update Error: ' . $e->getMessage());
         }
         
-        $this->redirect('index.php?url=products');
+        $this->redirect(BASE_URL . '/admin/products');
     }
 
     /**
@@ -351,7 +390,7 @@ class ProductsController extends BaseController {
 
         } catch (Exception $e) {
             $_SESSION['error'] = $e->getMessage();
-            $this->redirect('index.php?url=products');
+            $this->redirect(BASE_URL . '/admin/products');
         }
     }
 
@@ -396,7 +435,7 @@ class ProductsController extends BaseController {
 
         } catch (Exception $e) {
             $_SESSION['error'] = $e->getMessage();
-            $this->redirect('index.php?url=products');
+            $this->redirect(BASE_URL . '/admin/products');
         }
     }
     
@@ -417,7 +456,7 @@ class ProductsController extends BaseController {
             $_SESSION['error'] = 'Lỗi: ' . $e->getMessage();
         }
         
-        $this->redirect('index.php?url=products');
+        $this->redirect(BASE_URL . '/admin/products');
     }
     
     /**
@@ -439,7 +478,7 @@ class ProductsController extends BaseController {
             error_log("Hard delete error: " . $e->getMessage());
         }
         
-        $this->redirect('index.php?url=products');
+        $this->redirect(BASE_URL . '/admin/products');
     }
 
     /**
@@ -473,7 +512,7 @@ class ProductsController extends BaseController {
             }
 
             // Xóa file vật lý
-            $filePath = $_SERVER['DOCUMENT_ROOT'] . '/Ecom_website/' . $image->file_path;
+            $filePath = $_SERVER['DOCUMENT_ROOT'] . BASE_URL . '/' . ltrim($image->file_path, '/');
             if (file_exists($filePath)) {
                 unlink($filePath);
             }

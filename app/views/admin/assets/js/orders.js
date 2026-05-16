@@ -9,7 +9,7 @@
  * Xem chi tiết đơn hàng
  */
 function viewOrderDetails(orderId) {
-    window.location.href = 'index.php?url=order-details&id=' + orderId;
+    window.location.href = APP_BASE_URL + '/admin/order-details?id=' + orderId;
 }
 
 /**
@@ -17,7 +17,7 @@ function viewOrderDetails(orderId) {
  */
 function editOrder(orderId) {
     console.log('editOrder called with orderId:', orderId);
-    window.location.href = 'index.php?url=order-details&id=' + orderId;
+    window.location.href = APP_BASE_URL + '/admin/order-details?id=' + orderId;
 }
 
 /**
@@ -81,30 +81,7 @@ function deleteOrder(orderId) {
  * Confirm xóa đơn hàng sau khi check checkbox
  */
 function confirmDeleteOrder(orderId) {
-    const form = document.createElement('form');
-    form.method = 'GET';
-    form.action = 'index.php';
-    
-    const urlInput = document.createElement('input');
-    urlInput.type = 'hidden';
-    urlInput.name = 'url';
-    urlInput.value = 'orders';
-    
-    const actionInput = document.createElement('input');
-    actionInput.type = 'hidden';
-    actionInput.name = 'action';
-    actionInput.value = 'hardDelete';
-    
-    const idInput = document.createElement('input');
-    idInput.type = 'hidden';
-    idInput.name = 'id';
-    idInput.value = orderId;
-    
-    form.appendChild(urlInput);
-    form.appendChild(actionInput);
-    form.appendChild(idInput);
-    document.body.appendChild(form);
-    form.submit();
+    window.location.href = APP_BASE_URL + '/admin/orders?action=hardDelete&id=' + orderId;
 }
 
 // =================== STATUS UPDATE FUNCTIONS ===================
@@ -125,7 +102,7 @@ function updatePaymentStatus(orderId, newStatus) {
         // Tạo form và submit
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = 'index.php?url=orders&action=updatePayment&id=' + orderId;
+        form.action = APP_BASE_URL + '/admin/orders?action=updatePayment&id=' + orderId;
         
         const statusInput = document.createElement('input');
         statusInput.type = 'hidden';
@@ -165,7 +142,7 @@ function updateOrderStatus(orderId, newStatus) {
         // Tạo form và submit
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = 'index.php?url=orders&action=updateOrder&id=' + orderId;
+        form.action = APP_BASE_URL + '/admin/orders?action=updateOrder&id=' + orderId;
         
         const statusInput = document.createElement('input');
         statusInput.type = 'hidden';

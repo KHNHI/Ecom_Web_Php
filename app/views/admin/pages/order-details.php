@@ -36,6 +36,7 @@ if (!$order) {
     <link rel="stylesheet" href="app/views/admin/assets/css/main.css">
 </head>
 <body>
+    <script>var APP_BASE_URL = '<?= BASE_URL ?>';</script>
     <div class="admin-wrapper">
         <!-- Sidebar Component Container -->
         <div id="sidebar-container"></div>
@@ -49,7 +50,7 @@ if (!$order) {
             <main class="content">
                 <!-- Back Button -->
                 <div class="mb-3">
-                    <a href="index.php?url=orders" class="btn btn-outline-secondary btn-sm">
+                    <a href="<?= BASE_URL ?>/admin/orders" class="btn btn-outline-secondary btn-sm">
                         <img src="https://cdn-icons-png.flaticon.com/512/271/271220.png" alt="Back" width="14" height="14" class="me-1">
                         Quay lại Danh Sách
                     </a>
@@ -356,7 +357,7 @@ if (!$order) {
 
                 <!-- Action Buttons -->
                 <div class="d-flex gap-2 justify-content-end mt-4">
-                    <a href="index.php?url=orders" class="btn btn-outline-secondary">
+                    <a href="<?= BASE_URL ?>/admin/orders" class="btn btn-outline-secondary">
                         <img src="https://cdn-icons-png.flaticon.com/512/271/271220.png" alt="Back" width="16" height="16" class="me-1">
                         Quay Lại
                     </a>
@@ -379,13 +380,13 @@ if (!$order) {
                 brandName: 'Trang Sức',
                 activePage: 'orders',
                 links: {
-                    dashboard: 'index.php?url=dashboard',
-                    products: 'index.php?url=products',
-                    categories: 'index.php?url=categories',
-                    collections: 'index.php?url=collections',
-                    orders: 'index.php?url=orders',
-                    customers: 'index.php?url=customers',
-                    reviews: 'index.php?url=reviews'
+                    dashboard: '<?= BASE_URL ?>/admin/dashboard',
+                    products: '<?= BASE_URL ?>/admin/products',
+                    categories: '<?= BASE_URL ?>/admin/categories',
+                    collections: '<?= BASE_URL ?>/admin/collections',
+                    orders: '<?= BASE_URL ?>/admin/orders',
+                    customers: '<?= BASE_URL ?>/admin/customers',
+                    reviews: '<?= BASE_URL ?>/admin/reviews'
                 },
                 categoriesTitle: 'DANH MỤC'
             },
@@ -427,7 +428,7 @@ if (!$order) {
                 
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = 'index.php?url=orders&action=updatePayment&id=' + orderId;
+                form.action = '<?= BASE_URL ?>/admin/orders?action=updatePayment&id=' + orderId;
                 
                 const statusInput = document.createElement('input');
                 statusInput.type = 'hidden';
@@ -474,7 +475,7 @@ if (!$order) {
                 
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = 'index.php?url=orders&action=updateOrder&id=' + orderId;
+                form.action = '<?= BASE_URL ?>/admin/orders?action=updateOrder&id=' + orderId;
                 
                 const statusInput = document.createElement('input');
                 statusInput.type = 'hidden';

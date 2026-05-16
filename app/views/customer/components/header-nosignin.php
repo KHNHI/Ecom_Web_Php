@@ -62,8 +62,8 @@
                 
                 <!-- Auth Links -->
                 <div class="me-3">
-                    <a href="/Ecom_website/signin" class="text-decoration-none me-3" style="color: #666;">Sign in</a>
-                    <a href="/Ecom_website/signup" class="text-decoration-none" style="color: #666;">Sign up</a>
+                    <a href="<?= BASE_URL ?>/signin" class="text-decoration-none me-3" style="color: #666;">Sign in</a>
+                    <a href="<?= BASE_URL ?>/signup" class="text-decoration-none" style="color: #666;">Sign up</a>
                 </div>
                 
                 <!-- Icons -->
