@@ -38,6 +38,25 @@ foreach (glob(__DIR__ . '/helpers/*.php') as $file) {
     require_once $file;
 }
 
+// --- GLOBAL SESSION TIMEOUT CHECK ---
+if (class_exists('SessionHelper') && SessionHelper::isLoggedIn()) {
+    if (SessionHelper::isSessionExpired()) {
+        SessionHelper::destroyUserSession();
+        // Redirect to login if not an API request
+        $isApi = strpos($_SERVER['REQUEST_URI'] ?? '', '/api/') !== false;
+        if (!$isApi) {
+            header('Location: ' . BASE_URL . '/login?timeout=1');
+            exit;
+        } else {
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'message' => 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.']);
+            exit;
+        }
+    } else {
+        SessionHelper::refreshSession();
+    }
+}
+
 // Nạp các file model
 
 foreach (glob(__DIR__ . '/app/models/*.php') as $file) {

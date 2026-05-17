@@ -439,15 +439,90 @@
                                 Đơn hàng của tôi
                             </h5>
                             
-                            <div class="text-center py-5">
-                                <i class="fas fa-shopping-bag fa-3x text-muted mb-3"></i>
-                                <h6 class="text-muted">Bạn chưa có đơn hàng nào</h6>
-                                <p class="text-muted">Hãy bắt đầu mua sắm để xem đơn hàng tại đây</p>
-                                <a href="<?= BASE_URL ?>/products" class="btn btn-primary">
-                                    <i class="fas fa-shopping-cart me-2"></i>
-                                    Mua sắm ngay
-                                </a>
-                            </div>
+                            <?php if (!empty($orders)): ?>
+                                <?php foreach ($orders as $order): ?>
+                                    <div class="card mb-3 border-0 shadow-sm" style="border-radius: 12px; overflow: hidden;">
+                                        <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                                            <div>
+                                                <strong>Đơn hàng #<?= $order->order_id ?></strong>
+                                                <small class="text-muted ms-2">
+                                                    <i class="fas fa-clock me-1"></i>
+                                                    <?= date('d/m/Y H:i', strtotime($order->created_at)) ?>
+                                                </small>
+                                            </div>
+                                            <div>
+                                                <?php
+                                                    $statusMap = [
+                                                        'pending'   => ['label' => 'Chờ xử lý',    'class' => 'warning',   'icon' => 'clock'],
+                                                        'paid'      => ['label' => 'Đã thanh toán', 'class' => 'info',      'icon' => 'credit-card'],
+                                                        'shipped'   => ['label' => 'Đang giao',     'class' => 'primary',   'icon' => 'truck'],
+                                                        'delivered' => ['label' => 'Đã giao',       'class' => 'success',   'icon' => 'check-circle'],
+                                                        'cancelled' => ['label' => 'Đã hủy',        'class' => 'danger',    'icon' => 'times-circle'],
+                                                    ];
+                                                    $status = $statusMap[$order->order_status] ?? ['label' => $order->order_status, 'class' => 'secondary', 'icon' => 'question-circle'];
+                                                ?>
+                                                <span class="badge bg-<?= $status['class'] ?>" style="font-size: 0.85rem; padding: 6px 12px; border-radius: 20px;">
+                                                    <i class="fas fa-<?= $status['icon'] ?> me-1"></i>
+                                                    <?= $status['label'] ?>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="card-body py-3">
+                                            <?php if (!empty($order->items)): ?>
+                                                <?php foreach ($order->items as $item): ?>
+                                                    <div class="d-flex align-items-center mb-2 pb-2 <?= $item !== end($order->items) ? 'border-bottom' : '' ?>">
+                                                        <div class="flex-grow-1">
+                                                            <div class="fw-semibold"><?= htmlspecialchars($item->product_name) ?></div>
+                                                            <small class="text-muted">
+                                                                <?php if (!empty($item->size)): ?>
+                                                                    Size: <?= htmlspecialchars($item->size) ?>
+                                                                <?php endif; ?>
+                                                                <?php if (!empty($item->color)): ?>
+                                                                    | Màu: <?= htmlspecialchars($item->color) ?>
+                                                                <?php endif; ?>
+                                                                | SL: <?= $item->quantity ?>
+                                                            </small>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <strong style="color: var(--gold);">
+                                                                <?= number_format($item->total_price, 0, ',', '.') ?>₫
+                                                            </strong>
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <p class="text-muted mb-0"><em>Không có thông tin sản phẩm</em></p>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div class="card-footer bg-white d-flex justify-content-between align-items-center py-3">
+                                            <div>
+                                                <?php if (!empty($order->payment)): ?>
+                                                    <small class="text-muted">
+                                                        <i class="fas fa-wallet me-1"></i>
+                                                        <?= htmlspecialchars($order->payment->payment_method ?? 'N/A') ?>
+                                                    </small>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div>
+                                                <span class="text-muted me-2">Tổng cộng:</span>
+                                                <strong style="font-size: 1.1rem; color: var(--dark-brown);">
+                                                    <?= number_format($order->total_amount, 0, ',', '.') ?>₫
+                                                </strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="text-center py-5">
+                                    <i class="fas fa-shopping-bag fa-3x text-muted mb-3"></i>
+                                    <h6 class="text-muted">Bạn chưa có đơn hàng nào</h6>
+                                    <p class="text-muted">Hãy bắt đầu mua sắm để xem đơn hàng tại đây</p>
+                                    <a href="<?= BASE_URL ?>/products" class="btn btn-primary">
+                                        <i class="fas fa-shopping-cart me-2"></i>
+                                        Mua sắm ngay
+                                    </a>
+                                </div>
+                            <?php endif; ?>
                         </div>
                         
                         <!-- Settings Tab -->

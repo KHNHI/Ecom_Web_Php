@@ -41,15 +41,27 @@ class ProfileController extends BaseController {
         // Get user's default address
         $defaultAddress = $this->userModel->getDefaultAddress($userId);
         
+        // Get user's orders
+        $orderModel = new Order();
+        $orders = $orderModel->getOrdersByUserId($userId);
+        
+        // Attach order items to each order
+        foreach ($orders as $order) {
+            $order->items = $orderModel->getOrderItems($order->order_id);
+            $order->payment = $orderModel->getPaymentInfo($order->order_id);
+        }
+        
         // Debug: Log user and address data
         error_log("Profile Index - User ID: $userId");
         error_log("Profile Index - User data: " . json_encode($user));
         error_log("Profile Index - Default address: " . json_encode($defaultAddress));
+        error_log("Profile Index - Orders count: " . count($orders));
 
         $this->view('customer/pages/profile', [
             'title' => 'Thông tin cá nhân',
             'user' => $user,
-            'defaultAddress' => $defaultAddress
+            'defaultAddress' => $defaultAddress,
+            'orders' => $orders
         ]);
     }
 
